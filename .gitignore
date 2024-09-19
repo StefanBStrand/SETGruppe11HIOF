@@ -115,3 +115,6 @@ dmypy.json
 *.iws
 .idea/
 .idea_modules/
+
+# Custom
+.DS_Store
