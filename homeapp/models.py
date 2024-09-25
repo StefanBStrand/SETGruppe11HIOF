@@ -9,4 +9,12 @@ class SmartDevice(models.Model):
     description = models.TextField(blank=True)
     is_on = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
+
+class CarCharger(SmartDevice):
+    is_connected_to_car = models.BooleanField(default=False)
+    power_consumption = models.IntegerField(default=0)
+    total_power_consumption = models.IntegerField(default=0)
 
