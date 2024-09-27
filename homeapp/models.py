@@ -2,6 +2,13 @@ from django.db import models
 
 # Create your models here.
 
+class Room(models.Model):
+    name = models.CharField(max_length=128, unique=False)
+    home = models.ForeignKey(Home, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
 class SmartDevice(models.Model):
     name = models.CharField(max_length=128)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
