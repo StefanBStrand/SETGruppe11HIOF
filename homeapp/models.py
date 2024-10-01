@@ -25,3 +25,6 @@ class CarCharger(SmartDevice):
     power_consumption = models.IntegerField(default=0)
     total_power_consumption = models.IntegerField(default=0)
 
+class SmartBulb(SmartDevice):
+    brightness = models.IntegerField(default=100)
+    color = models.CharField(max_length=20, default='white')
