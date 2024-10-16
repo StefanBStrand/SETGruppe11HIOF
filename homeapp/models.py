@@ -52,4 +52,4 @@ class SmartThermostat(SmartDevice):
 
     def set_temperature(self, temperature):
         self.set_temperature = temperature
-        SmartThermostat
+
