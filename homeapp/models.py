@@ -46,9 +46,17 @@ class SmartThermostat(SmartDevice):
     set_temperature = models.IntegerField()
     humidity = models.IntegerField()
 
+    # Adding a mode field with possible choices
+    MODE_CHOICES = [
+        ('cool', 'Cooling'),
+        ('heat', 'Heating'),
+        ('off', 'Off'),
+    ]
+    mode = models.CharField(max_length=10, choices=MODE_CHOICES, default='off')
+
     def get_temperature(self):
-        #  Call stub to get a temp reading?
         return self.temperature_in_room
 
     def set_temperature(self, temperature):
         self.set_temperature = temperature
+
