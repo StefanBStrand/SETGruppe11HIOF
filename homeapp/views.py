@@ -16,5 +16,5 @@ class HomeView(LoginRequiredMixin, TemplateView):
         context['home'] = Home.objects.filter(owner=user)
         context['rooms'] = Room.objects.filter(home__owner=user)
         context['devices'] = SmartDevice.objects.filter(owner=user)
-        context['chargers'] = CarCharger.objects.filter(home__owner=user)
+        context['chargers'] = CarCharger.objects.filter(owner=user)
         return context
