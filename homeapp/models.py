@@ -4,7 +4,6 @@ from django.db import models
 
 class Home(models.Model):
     name = models.CharField(max_length=128)
-
     owner = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
@@ -26,8 +25,6 @@ class SmartDevice(models.Model):
     description = models.TextField(blank=True)
     is_on = models.BooleanField(default=False)
 
-    class Meta:
-        abstract = True
 
     def __str__(self):
         return self.name
