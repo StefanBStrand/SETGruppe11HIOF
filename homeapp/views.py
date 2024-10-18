@@ -3,7 +3,9 @@ from django.shortcuts import render
 # Create your views here.
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from .models import Home, Room, SmartDevice, CarCharger
+from .models import Home, Room, SmartDevice, CarCharger, SmartThermostat
+from django.http import JsonResponse
+
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home.html'
@@ -18,3 +20,16 @@ class HomeView(LoginRequiredMixin, TemplateView):
         context['devices'] = SmartDevice.objects.filter(owner=user)
         context['chargers'] = CarCharger.objects.filter(owner=user)
         return context
+
+
+def update_thermostat(request, id):
+    if request.method == 'POST':
+        thermostat = SmartThermostat.objects.get(id=id)
+        mode = request.POST.get('mode')
+        thermostat.mode = mode
+        thermostat.save()
+        return JsonResponse({
+            'status': 'updated',
+            'new_temperature': thermostat.set_temperature,
+            'new_mode': thermostat.mode
+        })

@@ -9,7 +9,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .views import HomeView
+from . import views
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home')
+    path('', HomeView.as_view(), name='home'),
+    path('update_thermostat/<int:id>/', views.update_thermostat, name='update_thermostat'),
 ]

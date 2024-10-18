@@ -25,7 +25,6 @@ class SmartDevice(models.Model):
     description = models.TextField(blank=True)
     is_on = models.BooleanField(default=False)
 
-
     def __str__(self):
         return self.name
 
@@ -43,7 +42,7 @@ class SmartBulb(SmartDevice):
 
 class SmartThermostat(SmartDevice):
     temperature_in_room = models.IntegerField()
-    set_temperature = models.IntegerField()
+    set_temperature = models.IntegerField(default=22)
     humidity = models.IntegerField()
 
     # Adding a mode field with possible choices
@@ -57,6 +56,6 @@ class SmartThermostat(SmartDevice):
     def get_temperature(self):
         return self.temperature_in_room
 
-    def set_temperature(self, temperature):
+    def update_temperature(self, temperature):
         self.set_temperature = temperature
 
