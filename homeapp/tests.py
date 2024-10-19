@@ -38,3 +38,25 @@ class SmartThermostatViewTest(TestCase):
             'new_mode': 'cool'
         })
 
+
+class SmartThermostatUnitTest(TestCase):
+    def setUp(self):
+        self.thermostat = SmartThermostat.objects.create(
+            temperature_in_room=20,
+            set_temperature=22,
+            humidity=45,
+            mode='off'
+        )
+
+    def test_update_thermostat_mode_unit(self):
+        url = reverse('update_thermostat', args=[self.thermostat.id])
+        response = self.client.post(url, {'mode': 'cool'})
+        self.thermostat.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.thermostat.mode, 'cool')
+        self.assertJSONEqual(response.content, {
+            'status': 'updated',
+            'new_temperature': self.thermostat.set_temperature,
+            'new_mode': 'cool'
+        })
