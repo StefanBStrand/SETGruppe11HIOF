@@ -39,15 +39,6 @@ class SmartThermostatViewTest(TestCase):
         })
 
 
-class SmartThermostatUnitTest(TestCase):
-    def setUp(self):
-        self.thermostat = SmartThermostat.objects.create(
-            temperature_in_room=20,
-            set_temperature=22,
-            humidity=45,
-            mode='off'
-        )
-
     def test_update_thermostat_mode_unit(self):
         url = reverse('update_thermostat', args=[self.thermostat.id])
         response = self.client.post(url, {'mode': 'cool'})
