@@ -22,14 +22,16 @@ class HomeView(LoginRequiredMixin, TemplateView):
         return context
 
 
+# View using render() for Django templates
 def update_thermostat(request, id):
     if request.method == 'POST':
         thermostat = SmartThermostat.objects.get(id=id)
         mode = request.POST.get('mode')
         thermostat.mode = mode
         thermostat.save()
-        return JsonResponse({
+        context = {
             'status': 'updated',
             'new_temperature': thermostat.set_temperature,
             'new_mode': thermostat.mode
-        })
+        }
+        return render(request, 'thermostat.html', context)
