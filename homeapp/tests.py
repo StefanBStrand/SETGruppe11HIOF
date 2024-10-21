@@ -17,11 +17,11 @@ class SmartThermostatViewTest(TestCase):
             humidity=45,
             mode='off'
         )
-        self.url = reverse('update_thermostat', args=[self.thermostat.id])
 
     def test_update_thermostat_view_valid(self):
         # Test a valid POST request to update the thermostat
-        response = self.client.post(self.url, {'mode': 'cool'})
+        url = reverse('update_thermostat', args=[self.thermostat.id])
+        response = self.client.post(url, {'mode': 'cool'})
         self.thermostat.refresh_from_db()
 
         self.assertEqual(response.status_code, 302)  # Redirect
@@ -30,7 +30,8 @@ class SmartThermostatViewTest(TestCase):
 
     def test_update_thermostat_view_invalid_mode(self):
         # Test an invalid mode submission
-        response = self.client.post(self.url, {'mode': 'invalid_mode'})
+        url = reverse('update_thermostat', args=[self.thermostat.id])
+        response = self.client.post(url, {'mode': 'invalid_mode'})
         self.thermostat.refresh_from_db()
 
         self.assertEqual(response.status_code, 200)  # Should not redirect, stay on the page
@@ -46,6 +47,24 @@ class SmartThermostatViewTest(TestCase):
 
     def test_update_thermostat_redirect(self):
         # Test that a successful update behaves as expected with a redirect
-        response = self.client.post(self.url, {'mode': 'heat'})
+        url = reverse('update_thermostat', args=[self.thermostat.id])
+        response = self.client.post(url, {'mode': 'heat'})
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('thermostat_view', args=[self.thermostat.id]))
+
+    # Thermostat_detail tests: ******
+
+    def test_thermostat_detail_view_exists(self):
+        # Test that the detail view returns a 200 status code for an existing thermostat
+        url = reverse('thermostat_view', args=[self.thermostat.id])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'thermostat_detail.html')
+        self.assertContains(response, self.thermostat.set_temperature)
+        self.assertContains(response, self.thermostat.mode)
+
+    def test_thermostat_detail_view_non_existent(self):
+        # Test that the detail view returns a 404 status code for a non-existent thermostat
+        non_existent_url = reverse('thermostat_view', args=[9999])  # Assuming 9999 doesn't exist
+        response = self.client.get(non_existent_url)
+        self.assertEqual(response.status_code, 404)
