@@ -1,8 +1,6 @@
-from django.test import TestCase
 
 # Create your tests here.
 
-from django.http import JsonResponse
 from unittest.mock import patch
 from django.test import TestCase
 from django.urls import reverse
@@ -10,28 +8,44 @@ from .models import SmartThermostat
 
 
 class SmartThermostatViewTest(TestCase):
+
     def setUp(self):
-        # Create a SmartThermostat instance before each test
+        # Create a SmartThermostat instance for testing
         self.thermostat = SmartThermostat.objects.create(
             temperature_in_room=20,
             set_temperature=22,
             humidity=45,
             mode='off'
         )
+        self.url = reverse('update_thermostat', args=[self.thermostat.id])
 
-    def test_update_thermostat_view(self):
-        # Test the POST request that updates the thermostat
-        url = reverse('update_thermostat', args=[self.thermostat.id])
-        response = self.client.post(url, {'mode': 'cool'})
+    def test_update_thermostat_view_valid(self):
+        # Test a valid POST request to update the thermostat
+        response = self.client.post(self.url, {'mode': 'cool'})
         self.thermostat.refresh_from_db()
 
-        # Check if the response is 200 OK
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)  # Redirect
+        self.assertEqual(self.thermostat.mode, 'cool')
+        self.assertRedirects(response, reverse('thermostat_view', args=[self.thermostat.id]))
 
-        # Ensure the correct template is used
-        self.assertTemplateUsed(response, 'thermostat.html')
+    def test_update_thermostat_view_invalid_mode(self):
+        # Test an invalid mode submission
+        response = self.client.post(self.url, {'mode': 'invalid_mode'})
+        self.thermostat.refresh_from_db()
 
-        # Check if the template contains the updated mode
-        self.assertContains(response, 'updated')
-        self.assertContains(response, 'cool')
-        self.assertContains(response, '22')  # Check if temperature is displayed
+        self.assertEqual(response.status_code, 200)  # Should not redirect, stay on the page
+        self.assertNotEqual(self.thermostat.mode, 'invalid_mode')
+        self.assertContains(response, "Invalid mode selected.")
+
+    def test_update_thermostat_view_non_existent(self):
+        # Test for a non-existent thermostat (404 response)
+        non_existent_url = reverse('update_thermostat', args=[9999])  # Assume 9999 doesn't exist
+        response = self.client.post(non_existent_url, {'mode': 'cool'})
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_thermostat_redirect(self):
+        # Test that a successful update behaves as expected with a redirect
+        response = self.client.post(self.url, {'mode': 'heat'})
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('thermostat_view', args=[self.thermostat.id]))

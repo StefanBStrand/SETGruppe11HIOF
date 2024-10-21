@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<!-- thermostat_detail.html -->
+<html lang="en">
+  <head>
+    <title>Thermostat Status</title>
+  </head>
+  <body>
+    <h1>Thermostat Status</h1>
+
+    <!-- Displaying the thermostat details -->
+    <p>Temperature: {{ thermostat.set_temperature }}</p>
+    <p>Mode: {{ thermostat.mode }}</p>
+    <p>Humidity: {{ thermostat.humidity }}</p>
+    <p>Room Temperature: {{ thermostat.temperature_in_room }}</p>
+
+    <a href="{% url 'update_thermostat' thermostat.id %}">Update Thermostat</a>
+  </body>
+</html>

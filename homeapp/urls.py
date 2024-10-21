@@ -14,4 +14,5 @@ from . import views
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('update_thermostat/<int:id>/', views.update_thermostat, name='update_thermostat'),
+    path('thermostat/<int:id>/', views.thermostat_detail, name='thermostat_view')
 ]
