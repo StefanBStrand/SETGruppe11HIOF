@@ -30,7 +30,11 @@ class SmartDevice(models.Model):
 
 
 class CarCharger(SmartDevice):
+    car_battery_capacity = models.IntegerField()
+    car_battery_charge = models.IntegerField()
     is_connected_to_car = models.BooleanField(default=False)
+    is_charging = models.BooleanField(default=False)
+    max_power_output = models.IntegerField()
     power_consumption = models.IntegerField(default=0)
     total_power_consumption = models.IntegerField(default=0)
 
