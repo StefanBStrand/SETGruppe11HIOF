@@ -55,3 +55,4 @@ def update_thermostat(request, id):
 def thermostat_detail(request, id):
     thermostat = get_object_or_404(SmartThermostat, id=id)
     return render(request, 'thermostat_detail.html', {'thermostat': thermostat})
+
