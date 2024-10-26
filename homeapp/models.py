@@ -117,4 +117,16 @@ class SmartThermostat(SmartDevice):
 
     def update_temperature(self, temperature):
         self.set_temperature = temperature
+        # Send request to Mock-api --> api.update_temperature()
+        # Mock-apiet returnerer True/false basert på om det har gått ok.
+        # Denne metoden returnerer denne true/false videre tilbake til controller (view)
 
+
+    # TODO: method for view humidity
+    # TODO: method for update mode.
+    # TODO: method for view mode.
+    # TODO: Teller positivt med lagring i db - funksjonene (SmartThermostat) må snakke med djangoDB.
+
+
+    #TODO: Trykk på knapp i interfacet for å sette ny temperatur --> Kaller på funksjon i Controller (View)
+    # --> Som igjen kaller på update_temperature-metode i Model

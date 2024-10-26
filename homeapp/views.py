@@ -22,6 +22,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
         return context
 
 
+
 def update_thermostat(request, id):
     # Fetch the thermostat object or return a 404 page if it doesn't exist
     thermostat = get_object_or_404(SmartThermostat, id=id)
