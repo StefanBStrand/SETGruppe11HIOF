@@ -2,15 +2,15 @@
 
 {% block content %}
 
-    <section class="device-grid">
+   <section class="device-grid">
         <p>DUMMYTEKST FOR TESTING</p>
         <button class="device-button">Elbillader</button>
-        <button class="device-button">Termostat</button>
+        <a href="{% url 'thermostat_detail' id=13 %}" class="device-button">Termostat</a>
         <button class="device-button">Musikkanlegg</button>
         <button class="device-button">Default</button>
         <button class="device-button">Default</button>
         <button class="device-button">Default</button>
-    </section>
+   </section>
 
 
 {% endblock content %}
