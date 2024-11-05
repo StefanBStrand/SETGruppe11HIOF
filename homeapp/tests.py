@@ -4,7 +4,7 @@
 from unittest.mock import patch
 from django.test import TestCase
 from django.urls import reverse
-from .models import SmartThermostat, CarCharger
+from .models import SmartThermostat, CarCharger, SmartBulb
 
 
 class SmartThermostatViewTest(TestCase):
@@ -157,3 +157,52 @@ class CarChargerUnitTests(TestCase):
         self.car_charger.save()
         result = self.car_charger.calculate_estimated_charging_time_in_minutes()
         self.assertEqual(result, "Battery is already fully charged.")
+
+class TestSmartBulbUnitTests(TestCase):
+    def setUp(self):
+        self.bulb = SmartBulb.objects.create(
+            brightness=100,
+            color='white',
+            is_on=True
+        )
+
+    def test_turn_on(self):
+        self.bulb.turn_off()
+
+        self.bulb.turn_on()
+
+        self.assertTrue(self.bulb.is_on)
+
+    def test_turn_off(self):
+        self.bulb.turn_off()
+
+        self.assertFalse(self.bulb.is_on)
+
+    def test_set_brightness_valid(self):
+        self.bulb.set_brightness(65)
+
+        self.assertEqual(self.bulb.brightness, 65)
+
+    def test_set_brightness_invalid(self):
+        self.bulb.set_brightness(150)
+
+        self.assertNotEqual(self.bulb.brightness, 150)
+        self.assertEqual(self.bulb.brightness, 100)
+
+    def test_set_color_valid(self):
+        self.bulb.set_color('blue')
+
+        self.assertEqual(self.bulb.color, 'blue')
+
+    def test_set_color_invalid(self):
+        self.bulb.set_color('purple')
+
+        self.assertNotEqual(self.bulb.color, 'purple')
+        self.assertEqual(self.bulb.color, 'white')
+
+    def test_toggle_on_and_off(self):
+        self.bulb.turn_off()
+        self.assertFalse(self.bulb.is_on)
+
+        self.test_turn_on()
+        self.assertTrue(self.bulb.is_on)
