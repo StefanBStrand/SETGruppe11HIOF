@@ -14,6 +14,40 @@
     <p>Humidity: {{ thermostat.humidity }}</p>
     <p>Room Temperature: {{ thermostat.temperature_in_room }}</p>
 
-    <a href="{% url 'update_thermostat' thermostat.id %}">Update Thermostat</a>
+
+    <h2>Adjust Temperature</h2>
+    <label for="temperatureSlider">Set Temperature:
+        <span id="sliderValue">{{ thermostat.set_temperature }}</span>°C
+    </label>
+    <input type="range" id="temperatureSlider" min="10" max="30" value="{{ thermostat.set_temperature }}"
+           oninput="updateSliderValue(this.value)">
+
+    <script>
+
+    // Function to update the displayed temperature value in real-time...
+    function updateSliderValue(value) {
+        document.getElementById('sliderValue').textContent = value;
+    }
+
+    // Send the new temperature setting to the server on slider adjustment...ø
+    document.getElementById('temperatureSlider').addEventListener('change', function() {
+        fetch("{% url 'update_thermostat' thermostat.id %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ mode: '{{ thermostat.mode }}', set_temperature: this.value })
+        })
+        .then(response => {
+            if(response.ok) {
+                console.log("Temperature updated!");
+            }
+        });
+    });
+    </script>
+
+    <br><br> <!--Styling is not a priority right now...-->
+    <a href="{% url 'home' %}">Back to Home</a>
   </body>
 </html>

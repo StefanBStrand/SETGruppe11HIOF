@@ -47,7 +47,7 @@ def update_thermostat(request, id):
             return render(request, 'thermostat.html', {'thermostat': thermostat})
 
         # Redirect after successful POST to avoid form re-submission on refresh
-        return redirect('thermostat_view', id=thermostat.id)
+        return redirect('thermostat_detail', id=thermostat.id)
 
     # Render the template with the thermostat data if GET request
     return render(request, 'thermostat.html', {'thermostat': thermostat})

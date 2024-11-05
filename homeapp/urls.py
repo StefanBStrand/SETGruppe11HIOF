@@ -15,7 +15,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('update_thermostat/<int:id>/', views.update_thermostat, name='update_thermostat'),
-    path('thermostat/<int:id>/', views.thermostat_detail, name='thermostat_view'),
+    path('thermostat/<int:id>/', views.thermostat_detail, name='thermostat_detail'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
 
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout')
