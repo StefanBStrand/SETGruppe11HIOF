@@ -95,9 +95,36 @@ class CarCharger(SmartDevice):
 
 
 class SmartBulb(SmartDevice):
-    brightness = models.IntegerField(default=100)
-    color = models.CharField(max_length=20, default='white')
+    COLOR_CHOICES = [
+        ('white', 'White'),
+        ('black', 'Black'),
+        ('red', 'Red'),
+        ('green', 'Green'),
+        ('yellow', 'Yellow')
+    ]
 
+    brightness = models.IntegerField(default=100)
+    color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
+    is_on = models.BooleanField(default=True)
+
+    def turn_on(self):
+        """Skrur på lyset"""
+        self.is_on = True
+        print("Turning on.")
+
+    def turn_off(self):
+        self.is_on = False
+        print("Turning off.")
+
+    def set_brightness(self, value):
+        if 0 <= value <= 100:
+            self.brightness = value
+            print(f"Brightness set to {value}%.")
+
+    def set_color(self, new_color):
+        if new_color in dict(self.COLOR_CHOICES):
+            self.color = new_color
+            print(f"Color set to {new_color}.")
 
 class SmartThermostat(SmartDevice):
     temperature_in_room = models.IntegerField()
