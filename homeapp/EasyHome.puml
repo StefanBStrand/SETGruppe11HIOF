@@ -1,0 +1,56 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class User {
+    name: CharField
+
+}
+
+class Home {
+    name: CharField
+    owner: ForeignKey(User)
+}
+
+class Room {
+    name: CharField
+    home: ForeignKey(Home)
+}
+
+class SmartDevice{
+    name: CharField
+    room: ForeignKey(Room)
+    owner: ForeignKey(User)
+    description: TextField
+    is_on: BooleanField
+}
+
+class CarCharger{
+    car_battery_capacity: IntegerField
+    car_battery_charge: IntegerField
+    is_connected_to_car: BooleanField
+    is_charging: BooleanField
+    max_power_output: IntegerField
+    power_consumption: IntegerField
+    total_power_consumption: IntegerField
+}
+
+class SmartBulb{
+    brightness: IntegerField
+    color: CharField
+}
+
+class SmartThermostat {
+    temperature_in_room: IntegerField
+    set_temperature: IntegerField
+    humidity: IntegerField
+    mode: CharField
+}
+
+SmartDevice <|-- CarCharger
+SmartDevice <|-- SmartBulb
+SmartDevice <|-- SmartThermostat
+
+Home --> Room
+Room --> SmartDevice
+
+@enduml
