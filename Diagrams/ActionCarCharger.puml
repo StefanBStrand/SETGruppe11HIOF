@@ -13,6 +13,8 @@ Communicate_Car --> UnSuccess
 UnSuccess --> Error_message
 Error_message --> Communicate_Car : try again
 Success --> message_use
+message_use --> Start_Charging
+message_use --> Stop_Charging
 }
 
 
@@ -29,8 +31,6 @@ save_stop0 --> message_user0
 }
 
 actioncarcharg --> Check_Car_Connected
-Check_Car_Connected --> Start_Charging
-Check_Car_Connected --> Stop_Charging
 
 
 
