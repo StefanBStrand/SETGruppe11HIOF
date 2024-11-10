@@ -6,8 +6,17 @@ hide empty description
 state "Action Car Carger" as actioncarcharg
 [*] --> actioncarcharg
 
+
+
 state Start_Charging {
 [*] --> Check_Car_Connected
+Check_Car_Connected --> Car_is_connected
+Check_Car_Connected --> Car_not_connected
+Car_not_connected --> Error_message_user
+Error_message_user --> Check_Car_Connected
+Car_is_connected --> charging_state
+charging_state --> send_charging_message
+send_charging_message --> start_charing
 }
 
 state Stop_Charging {
@@ -26,5 +35,7 @@ actioncarcharg --> Start_Charging
 Start_Charging --> actioncarcharg
 actioncarcharg --> Stop_Charging
 Stop_Charging --> actioncarcharg
+
+
 
 @enduml
