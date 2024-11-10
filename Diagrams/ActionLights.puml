@@ -19,10 +19,15 @@ state Change_Light_Color {
 [*] --> yellow
 [*] --> blue
 [*] --> red
+yellow --> save_color
+blue --> save_color
+red --> save_color
 }
 
 actionlights --> Change_Light_Color
 lightson --> Change_Light_Color
+
+Change_Light_Color --> actionlights
 
 state Change_Light_Brightness {
 [*] --> brightness_level
@@ -36,5 +41,6 @@ remeber_level --> brightness_level : currentLevel
 
 actionlights --> Change_Light_Brightness
 lightson --> Change_Light_Brightness
+Change_Light_Brightness --> actionlights
 
 @enduml
