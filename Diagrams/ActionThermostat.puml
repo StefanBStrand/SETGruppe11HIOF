@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/state-diagram
+hide empty description
+
+state "Action Thermostat" as actionthermo
+[*] --> actionthermo : change Thermostat
+
+actionthermo --> idle
+
+
+@enduml
