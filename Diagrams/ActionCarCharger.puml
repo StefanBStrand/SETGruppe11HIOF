@@ -25,11 +25,7 @@ send_charging_message --> start_charing
 state Stop_Charging {
 
 Stopping0 --> save_stop0
-save_stop0 --> Communicate_Car0
 save_stop0 --> message_user0
-Communicate_Car0 --> UnSuccess0
-UnSuccess0 --> Error_message0
-Error_message0 --> Communicate_Car0
 }
 
 actioncarcharg --> Check_Car_Connected
