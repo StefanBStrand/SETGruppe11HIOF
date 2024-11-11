@@ -8,6 +8,7 @@ state "Action Car Carger" as actioncarcharg
 
 state Check_Car_Connected {
 [*] --> Communicate_Car
+Communicate_Car --> new_charging_choice : Stop_or_continue
 Communicate_Car --> Success
 Communicate_Car --> UnSuccess
 UnSuccess --> Error_message
@@ -16,8 +17,6 @@ Success --> message_use
 message_use --> Start_Charging
 message_use --> Stop_Charging
 }
-
-
 
 state Start_Charging {
 [*] --> charging_state
@@ -37,8 +36,10 @@ state Stop_Charging {
 
 Stopping --> save_stop
 save_stop --> message_user
-message_user --> [*]
 }
+
+Stop_Charging --> [*] : Unconnect_car
+Stop_Charging --> Communicate_Car
 
 charging_state --> Stop_Charging
 
