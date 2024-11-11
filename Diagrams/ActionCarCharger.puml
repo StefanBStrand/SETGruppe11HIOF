@@ -20,15 +20,27 @@ message_use --> Stop_Charging
 
 
 state Start_Charging {
+[*] --> charging_state
+charging_state --> change_charging_state
+change_charging_state --> send_charging_message
 charging_state --> send_charging_message
+charging_state --> change_kW
+change_kW --> send_charging_message
 send_charging_message --> start_charing
+start_charing --> message_user_charging
+message_user_charging --> charging_state
+charging_state --> message_user_charging
 }
 
 state Stop_Charging {
+[*] --> Stopping
 
-Stopping0 --> save_stop0
-save_stop0 --> message_user0
+Stopping --> save_stop
+save_stop --> message_user
+message_user --> [*]
 }
+
+charging_state --> Stop_Charging
 
 actioncarcharg --> Check_Car_Connected
 
