@@ -1,0 +1,54 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor MainUser as muser
+entity View as view
+entity Model as model
+database Database as db
+boundary Template as tp
+
+activate view
+view --> tp: Login sucessfull, transfer to homescreen
+deactivate view
+
+activate tp
+tp --> muser : Login successful, transfer to homescreen
+
+activate view
+view -> tp: Show Control panel homescreen
+deactivate view
+
+tp --> muser : Show homescreen
+
+muser -> tp : Click on "lights and turn on in living room"
+
+tp -> view : "Turn Light on" request
+activate view
+
+view -> model : Update Light status
+deactivate view
+activate model
+
+model -> db : Set light status to "ON"
+deactivate model
+activate db
+
+db --> model : Confirm light status "ON"
+deactivate db
+activate model
+
+model --> view : Light status updated
+deactivate model
+activate view
+
+view --> tp : Display: "Lights is on"
+deactivate view
+
+tp --> muser : Confirming: "Lights in the living room are ON"
+
+
+
+
+@enduml
