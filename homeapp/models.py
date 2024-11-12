@@ -56,17 +56,20 @@ class CarCharger(SmartDevice):
 
         if not self.is_connected_to_car:
             raise ValueError("Car is not connected. Please connect the car to start charging.")
+        if power_rate > self.max_power_output:
+            return "Power rate exceeds maximum output capacity."
         if power_rate <= self.max_power_output:
             self.power_consumption = power_rate
             self.is_charging = True
             self.save()
             return "Charging started at {} kW.".format(power_rate)
+        
 
     def stop_charging(self, charging_minutes):
 
         if self.is_connected_to_car and self.power_consumption > 0 and self.is_charging:
             self.is_charging = False
-            total_consumed = self.power_consumption * charging_minutes
+            total_consumed = self.power_consumption * charging_minutes / 60
             self.total_power_consumption += total_consumed
             self.power_consumption = 0
             self.save()
@@ -100,12 +103,13 @@ class SmartBulb(SmartDevice):
         ('black', 'Black'),
         ('red', 'Red'),
         ('green', 'Green'),
-        ('yellow', 'Yellow')
+        ('yellow', 'Yellow'),
+        ('blue', 'Blue'),
+
     ]
 
     brightness = models.IntegerField(default=100)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
-    is_on = models.BooleanField(default=True)
 
     def turn_on(self):
         """Skrur på lyset"""

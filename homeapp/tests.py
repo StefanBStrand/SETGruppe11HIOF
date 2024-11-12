@@ -75,9 +75,9 @@ class CarChargerUnitTests(TestCase):
     def setUp(self):
         self.car_charger = CarCharger.objects.create(
             car_battery_capacity=27,
-            car_battery_charge=10,
+            car_battery_charge=7,
             max_power_output=60,
-            power_consumption=50,
+            power_consumption=0,
             total_power_consumption=0
         )
 
@@ -115,7 +115,7 @@ class CarChargerUnitTests(TestCase):
         self.assertEqual(result, "Charging started at 10 kW.")
 
         # Starter lading med en effekt høyere enn maks kapasitet
-        result = self.car_charger.start_charging(power_rate=25)
+        result = self.car_charger.start_charging(power_rate=70)
         self.assertEqual(result, "Power rate exceeds maximum output capacity.")
 
 
@@ -127,8 +127,8 @@ class CarChargerUnitTests(TestCase):
         # Stopper lading etter 60 minutter (1 time)
         result = self.car_charger.stop_charging(charging_minutes=60)
         self.assertFalse(self.car_charger.is_charging)
-        self.assertEqual(self.car_charger.total_power_consumption, 10)  # 10 kW * 1 time
-        self.assertEqual(result, "Charging stopped. Total power consumed: 10.00 kWh.")
+        self.assertEqual(self.car_charger.total_power_consumption, 10)  
+        self.assertEqual(result, "Charging stopped. Total power consumed: 10.0 kWh.")
 
         # Stopper lading når det ikke er en aktiv ladesesjon
         result = self.car_charger.stop_charging(charging_minutes=60)
@@ -150,7 +150,7 @@ class CarChargerUnitTests(TestCase):
 
         # Estimerer ladetid fra nåværende lading til full kapasitet
         result = self.car_charger.calculate_estimated_charging_time_in_minutes()
-        self.assertEqual(result, "Estimated charging time: 300.00 minutes.")
+        self.assertEqual(result, "Estimated charging time: 120.00 minutes.")
 
         # Setter batteriet til fulladet og verifiserer
         self.car_charger.car_battery_charge = 100
