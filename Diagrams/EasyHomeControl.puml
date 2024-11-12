@@ -40,16 +40,21 @@ units --> thermostat
 units --> carcharger
 units --> lightbulb
 
-thermostat --> actionthermo
-carcharger --> actioncarcharg
-lightbulb --> actionlights
-
-actionlights --> chooseroom
-actionthermo --> chooseroom
+thermostat --> chooseroom
+lightbulb --> chooseroom
 
 chooseroom --> livingroom
 chooseroom --> bathroom
 chooseroom --> kitchen
+
+livingroom --> actionlights
+livingroom --> actionthermo
+bathroom --> actionlights
+bathroom --> actionthermo
+kitchen --> actionthermo
+kitchen --> actionlights
+
+carcharger --> actioncarcharg
 
 state "Choose Room" as chooseroom
 state "Choose Smart Unit" as chooseunit
