@@ -77,6 +77,16 @@ def update_thermostat(request, id):
     return render(request, 'thermostat.html', {'thermostat': thermostat})
 
 
+@login_required
+def delete_smart_thermostat_device_view(request, id):
+    smart_thermostat = get_object_or_404(SmartThermostat, id=id)
+
+    if request.method == 'POST':
+        smart_thermostat.delete()
+        return redirect(reverse_lazy('home'))
+
+    return render(request, 'delete_device.html', {'smart_thermostat': smart_thermostat})
+
 def thermostat_detail(request, id):
     thermostat = get_object_or_404(SmartThermostat, id=id)
     return render(request, 'thermostat_detail.html', {'thermostat': thermostat})

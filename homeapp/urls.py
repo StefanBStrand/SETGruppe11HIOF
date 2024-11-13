@@ -16,6 +16,7 @@ urlpatterns = [
     path('', views.home_view, name='home'),
     path('create_smart_thermostat_device/', views.create_smart_thermostat_device_view, name='create_smart_thermostat_device'),
     path('update_thermostat/<int:id>/', views.update_thermostat, name='update_thermostat'),
+    path('delete_device/<int:id>/', views.delete_smart_thermostat_device_view, name='delete_device'),
     path('thermostat/<int:id>/', views.thermostat_detail, name='thermostat_detail'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout')

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+Endre enhet
+<form action="" method="post">{% csrf_token %}
+    Skal du slette: {{ smart_thermostat.name }} ?
+    <input type="submit" value="SLETTE ENHET">
+
+</form>
+
+{% endblock content %}
