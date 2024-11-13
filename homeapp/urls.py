@@ -8,15 +8,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import HomeView
+from .views import home_view
 from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
+    path('', views.home_view, name='home'),
+    path('create_smart_thermostat_device/', views.create_smart_thermostat_device_view, name='create_smart_thermostat_device'),
     path('update_thermostat/<int:id>/', views.update_thermostat, name='update_thermostat'),
     path('thermostat/<int:id>/', views.thermostat_detail, name='thermostat_detail'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
-
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout')
 ]

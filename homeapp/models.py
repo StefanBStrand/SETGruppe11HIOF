@@ -5,9 +5,27 @@ from django.db import models
 class Home(models.Model):
     name = models.CharField(max_length=128)
     owner = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True)
+    CITY_CHOICES = [
+        ('Fredrikstad', 'Fredrikstad'),
+        ('Sarpsborg', 'Sarpsborg'),
+        ('Nesodden', 'Nesodden'),]
+    city = models.CharField(max_length=128, choices=CITY_CHOICES ,blank=False, default='Fredrikstad')
+    lat = models.FloatField(default=59.21)
+    lon = models.FloatField(default=10.92)
+
+    if city == 'Fredrikstad':
+        lat = 59.21
+        lon = 10.92
+    elif city == 'Sarpsborg':
+        lat = 59.28
+        lon = 11.11
+    elif city == 'Nesodden':
+        lat = 59.84
+        lon = 10.58
+
 
     def __str__(self):
-        return f"{self.name} ({self.owner.username})"
+        return f"{self.name}"
 
 
 class Room(models.Model):
@@ -105,7 +123,7 @@ class SmartBulb(SmartDevice):
 
     brightness = models.IntegerField(default=100)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
-    is_on = models.BooleanField(default=True)
+
 
     def turn_on(self):
         """Skrur på lyset"""
@@ -127,9 +145,9 @@ class SmartBulb(SmartDevice):
             print(f"Color set to {new_color}.")
 
 class SmartThermostat(SmartDevice):
-    temperature_in_room = models.IntegerField()
+    temperature_in_room = models.IntegerField(blank=True, null=True)
     set_temperature = models.IntegerField(default=22)  # TODO Change field to current_temperature.
-    humidity = models.IntegerField()
+    humidity = models.IntegerField(blank=True, null=True)
 
     # Adding a mode field with possible choices
     MODE_CHOICES = [
