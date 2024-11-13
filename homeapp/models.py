@@ -105,7 +105,7 @@ class SmartBulb(SmartDevice):
 
     brightness = models.IntegerField(default=100)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
-    is_on = models.BooleanField(default=True)
+
 
     def turn_on(self):
         """Skrur på lyset"""
