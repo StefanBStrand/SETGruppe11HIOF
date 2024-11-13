@@ -113,4 +113,28 @@ footer {
     border: none;
 }
 
+.circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #ccc;
+    font-family: Arial, sans-serif;
+}
+
+.circle h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.circle p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px;
+}
 
