@@ -5,7 +5,8 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.urls import reverse
 from django.db import connection
-from .models import SmartThermostat, CarCharger
+from .models import SmartBulb, SmartThermostat, CarCharger
+from .services import *
 from django.test import Client
 
 # Car charger stub tests
@@ -14,6 +15,7 @@ class CarChargerUnitTests(TestCase):
     def setUp(self):
         # Create a CarCharger instance for testing
         self.car_charger = CarCharger.objects.create(
+            device_type="Car Charger",
             car_battery_capacity=27,
             car_battery_charge=10,
             is_connected_to_car=False,
@@ -114,6 +116,7 @@ class SmartBulbUnitTests(TestCase):
     def setUp(self):
         # Create a SmartBulb instance for testing
         self.smart_bulb = SmartBulb.objects.create(
+            device_type="Smart Bulb",  # Added device_type
             name="Living Room Bulb",
             brightness=100,
             color="white",
@@ -178,6 +181,7 @@ class SmartBulbUnitTests(TestCase):
 class SmartThermostatTest(TestCase):
     def setUp(self):
         self.thermostat = SmartThermostat.objects.create(
+            device_type="Thermostat",  # Added device_type
             temperature_in_room=20,
             set_temperature=22,
             humidity=45,

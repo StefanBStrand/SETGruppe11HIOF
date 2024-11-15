@@ -1,5 +1,5 @@
 from django.db import models
-from services import *
+from .services import *
 # Create your models here.
 
 
@@ -20,6 +20,7 @@ class Room(models.Model):
 
 
 class SmartDevice(models.Model):
+    device_type = models.CharField(max_length=50, null=True, blank=True)
     name = models.CharField(max_length=128)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
     owner = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True)
@@ -64,6 +65,9 @@ class CarCharger(SmartDevice):
         
         if power_rate == 0:
             return "Cannot start charging with 0 kwh. Choose valid power rate"
+        
+        if power_rate > self.max_power_output:
+            return "Power rate exceeds maximum output capacity."
 
         response = send_charging_status_to_external_system(power_rate, start=True)
         if response["response"] == "success":
