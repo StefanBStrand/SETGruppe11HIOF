@@ -16,11 +16,12 @@ class SmartThermostatForm(forms.ModelForm):
 class SmartBulbForm(forms.ModelForm):
     class Meta:
         model = SmartBulb
-        fields = ['name', 'color', 'room']
+        fields = ['is_on','name', 'color', 'room']
 
         labels = {
             "name": "Visningsnavn på smartpære",
             "room": "Rom enheten skal være i",
+            "is_on": "Pære på",
 
         }
 

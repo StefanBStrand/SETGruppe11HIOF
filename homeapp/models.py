@@ -1,5 +1,10 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+
+from homeapp.services import send_turn_off_to_external_system, fetch_thermostat_data_from_external_system, \
+    send_temperature_update_to_external_system, send_mode_update_to_external_system, send_turn_on_to_external_system
+
+
 # Create your models here.
 
 
@@ -247,7 +252,7 @@ class SmartBulb(SmartDevice):
 class SmartThermostat(SmartDevice):
     temperature_in_room = models.IntegerField()
     set_temperature = models.IntegerField(default=22)  
-    humidity = models.IntegerField()
+    humidity = models.IntegerField(default=50)
 
     def get_device_type(self):
         return "smartthermostat"
