@@ -172,6 +172,10 @@ class SmartBulb(SmartDevice):
     brightness = models.IntegerField(default=100)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
 
+    def get_device_type(self):
+        return "smartbulb"
+
+
     def fetch_data(self):
         # Fetches SmartBulb data from a stub simulating the external system.
         data = fetch_smartbulb_data_from_external_system()
@@ -244,6 +248,9 @@ class SmartThermostat(SmartDevice):
     temperature_in_room = models.IntegerField()
     set_temperature = models.IntegerField(default=22)  
     humidity = models.IntegerField()
+
+    def get_device_type(self):
+        return "smartthermostat"
 
     # Adding a mode field with possible choices
     MODE_CHOICES = [
