@@ -23,7 +23,10 @@ urlpatterns = [
     path('device/<str:device_type>/<int:id>/', views.device_detail_view, name='device_detail'),
     path('update_device/<str:device_type>/<int:id>/', views.update_device_view, name='update_device'),
     path('thermostat/<int:id>/', views.thermostat_detail, name='thermostat_detail'),
-    path('device/<int:id>/', views.device_detail_view, name='device_detail'),
+    path('device/<str:device_type>/<int:id>/update-temperature/', views.update_device_temperature, name='update_device_temperature'),
+    #path('device/<int:id>/', views.device_detail_view, name='device_detail'),
+    path('device/<str:device_type>/<int:id>/toggle-light/', views.toggle_light, name='toggle_light'),
+
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout')
 ]

@@ -1,5 +1,10 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+
+from homeapp.services import send_turn_off_to_external_system, fetch_thermostat_data_from_external_system, \
+    send_temperature_update_to_external_system, send_mode_update_to_external_system, send_turn_on_to_external_system
+
+
 # Create your models here.
 
 
@@ -71,21 +76,22 @@ class CarCharger(SmartDevice):
         return "carcharger"
 
 
+    def fetch_data(self):
+        # Fetches car charger data from a stub simulating the external system.
+        # Updates local status if a change is detected.
+        data = fetch_carcharger_data_from_external_system()
+        if data["response"] == "success":
+            # Update connection status if changed
+            if data["is_connected_to_car"] != self.is_connected_to_car:
+                self.is_connected_to_car = data["is_connected_to_car"]
 
-
-    def connect_to_car(self):
-        if not self.is_connected_to_car:
-            self.is_connected_to_car = True
+            # Update other fields based on the fetched data
+            self.car_battery_capacity = data["car_battery_capacity"]
+            self.car_battery_charge = data["car_battery_charge"]
+            self.is_charging = data["is_charging"]
             self.save()
-            return "Car is now connected."
-        return "Car is already connected."
-
-    def disconnect_from_car(self):
-        if self.is_connected_to_car:
-            self.is_connected_to_car = False
-            self.save()
-            return "Car is now disconnected."
-        return "Car is already disconnected."
+            return "Data fetched and local status updated successfully."
+        return "Failed to fetch data from the external system."
 
     def start_charging(self, power_rate):
 
@@ -129,49 +135,127 @@ class CarCharger(SmartDevice):
         return "Estimated charging time: {:.2f} minutes.".format(charging_time_minutes_to_full)
 
 
+# Getters
+    def get_battery_capacity(self):
+        # Returns the total battery capacity of the car.
+        return self.car_battery_capacity
+
+    def get_battery_charge(self):
+        # Returns the current charge level of the car battery.
+        return self.car_battery_charge
+
+    def get_is_connected_status(self):
+        # Returns whether the car is connected to the charger.
+        return self.is_connected_to_car
+
+    def get_is_charging_status(self):
+        # Returns whether the charger is actively charging.
+        return self.is_charging
+
+    def get_max_power_output(self):
+        # Returns the maximum power output of the charger.
+        return self.max_power_output
+
+    def get_current_power_consumption(self):
+        # Returns the current power consumption rate during charging.
+        return self.power_consumption
+
+    def get_total_power_consumption(self):
+        # Returns the total power consumption of the charger.
+        return self.total_power_consumption
+
 class SmartBulb(SmartDevice):
     COLOR_CHOICES = [
         ('white', 'White'),
         ('black', 'Black'),
         ('red', 'Red'),
         ('green', 'Green'),
-        ('yellow', 'Yellow')
+        ('yellow', 'Yellow'),
+        ('blue', 'Blue'),
     ]
 
     brightness = models.IntegerField(default=100)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
-    device_type = 'smartbulb'
+
     def get_device_type(self):
         return "smartbulb"
 
 
+    def fetch_data(self):
+        # Fetches SmartBulb data from a stub simulating the external system.
+        data = fetch_smartbulb_data_from_external_system()
+        if data:
+            self.is_on = data["is_on"]
+            self.brightness = data["brightness"]
+            self.color = data["color"]
+            self.save()
+        return data
+
+    def update_brightness(self, new_brightness):
+        # Checks if the new brightness value is valid
+        if not (0 <= new_brightness <= 100):
+            return "Invalid brightness value. Must be between 0 and 100."
+        
+        # Updates the brightness of the SmartBulb via a stub simulating the external system.
+        response = send_brightness_update_to_external_system(new_brightness)
+        if response["response"] == "success":
+            self.brightness = response["updated_brightness"]
+            self.save()
+            return f"Brightness updated to {self.brightness}%."
+        return "Failed to update brightness."
+
+    def update_color(self, new_color):
+        # Checks if the new color value is valid
+        if new_color not in dict(self.COLOR_CHOICES):
+            return f"Invalid color value. Must be one of: {', '.join(dict(self.COLOR_CHOICES).keys())}."
+        
+        # Updates the color of the SmartBulb via a stub simulating the external system.
+        response = send_color_update_to_external_system(new_color)
+        if response["response"] == "success":
+            self.color = response["updated_color"]
+            self.save()
+            return f"Color updated to {self.color}."
+        return "Failed to update color."
 
     def turn_on(self):
-        """Skrur på lyset"""
-        self.is_on = True
-        print("Turning on.")
+        # Turns on the SmartBulb via a stub simulating the external system.
+        response = send_turn_on_to_external_system()
+        if response["response"] == "success":
+            self.is_on = True
+            self.save()
+            return "SmartBulb is now ON."
+        return "Failed to turn on the SmartBulb."
 
     def turn_off(self):
-        self.is_on = False
-        print("Turning off.")
+        # Turns off the SmartBulb via a stub simulating the external system.
+        response = send_turn_off_to_external_system()
+        if response["response"] == "success":
+            self.is_on = False
+            self.save()
+            return "SmartBulb is now OFF."
+        return "Failed to turn off the SmartBulb."
+    
+    # Getters
+    def get_brightness(self):
+        # Returns the current brightness level
+        return self.brightness
 
-    def set_brightness(self, value):
-        if 0 <= value <= 100:
-            self.brightness = value
-            print(f"Brightness set to {value}%.")
+    def get_color(self):
+        # Returns the current color of the SmartBulb
+        return self.color
 
-    def set_color(self, new_color):
-        if new_color in dict(self.COLOR_CHOICES):
-            self.color = new_color
-            print(f"Color set to {new_color}.")
-
+    def get_is_on_status(self):
+        # Returns whether the SmartBulb is currently on
+        return self.is_on
 
 
 class SmartThermostat(SmartDevice):
-    temperature_in_room = models.IntegerField(blank=True, null=True)
-    set_temperature = models.IntegerField(default=22, validators=[MinValueValidator(5), MaxValueValidator(30)])  # TODO Change field to current_temperature.
-    humidity = models.IntegerField(blank=True, null=True)
-    device_type = 'smartthermostat'
+    temperature_in_room = models.IntegerField()
+    set_temperature = models.IntegerField(default=22)  
+    humidity = models.IntegerField(default=50)
+
+    def get_device_type(self):
+        return "smartthermostat"
 
     # Adding a mode field with possible choices
     MODE_CHOICES = [
@@ -180,17 +264,65 @@ class SmartThermostat(SmartDevice):
         ('off', 'Off'),
     ]
     mode = models.CharField(max_length=10, choices=MODE_CHOICES, default='off')
-    def get_device_type(self):
-        return "smartthermostat"
+
+    def fetch_data(self):
+        
+        # Fetches thermostat data from a stub simulating the external system. Could run at intervals and look for changes.
+        
+        data = fetch_thermostat_data_from_external_system()
+        if data:
+            self.temperature_in_room = data["current_temperature"]
+            self.set_temperature = data["set_temperature"]
+            self.humidity = data["humidity"]
+            self.mode = data["mode"]
+            self.save()
+        return data
+
+    def update_temperature(self, new_temperature):
+        
+        # Updates the thermostat's temperature via a stub simulating the external system.
+        
+        response = send_temperature_update_to_external_system(new_temperature)
+        if response["response"] == "success":
+            self.set_temperature = response["updated_temperature"]
+            self.save()
+            return f"Temperature updated to {self.set_temperature}°C."
+        return "Failed to update temperature."
+
+    def update_mode(self, new_mode):
+        
+        # Updates the thermostat's mode via a stub simulating the external system.
+        
+        response = send_mode_update_to_external_system(new_mode)
+        if response["response"] == "success":
+            self.mode = response["updated_mode"]
+            self.save()
+            return f"Mode updated to {self.mode}."
+        return "Failed to update mode."
 
     def get_temperature(self):
+        # Returns the current room temperature
         return self.temperature_in_room
 
-    def update_temperature(self, temperature):
-        self.set_temperature = temperature
-        # Send request to Mock-api --> api.update_temperature()
-        # Mock-apiet returnerer True/false basert på om det har gått ok.
-        # Denne metoden returnerer denne true/false videre tilbake til controller (view)
+    def get_set_temperature(self):
+        # Returns the desired temperature (set point)
+        return self.set_temperature
+
+    def get_humidity(self):
+        # Returns the current humidity level
+        return self.humidity
+
+    def get_mode(self):
+        # Returns the current operating mode of the thermostat
+        return self.mode
+
+
+
+
+        
+    # Send request to Mock-api --> api.update_temperature()
+    # Mock-apiet returnerer True/false basert på om det har gått ok.
+    # Denne metoden returnerer denne true/false videre tilbake til controller (view)
 
 
     # TODO: method for view humidity

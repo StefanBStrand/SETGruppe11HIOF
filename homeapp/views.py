@@ -1,11 +1,11 @@
+from django.http import HttpResponse
+
 from .forms import SmartThermostatForm, SmartBulbForm, CarChargerForm
 # Create your views here.
 from .models import Home, Room, SmartDevice, CarCharger, SmartThermostat, SmartBulb
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from django.urls import reverse_lazy
-
-
+from django.urls import reverse_lazy, reverse
 
 from django.contrib.auth.decorators import login_required
 
@@ -121,6 +121,34 @@ def thermostat_detail(request, id):
     return render(request, 'thermostat_detail.html', {'thermostat': thermostat})
 
 @login_required
+def update_device_temperature(request, device_type, id):
+    if request.method == "POST":
+        # Hent enheten basert på device_type og id
+        device = get_object_or_404(SmartThermostat, id=id)
+
+
+        # Hent ny temperatur fra POST-data
+        new_temperature = int(request.POST.get('temperature'))
+
+        try:
+            # Kall modellen sin metode for oppdatering
+            response_message = device.update_temperature(new_temperature)
+            # Legg til en suksessmelding
+            messages.success(request, response_message)
+        except Exception as e:
+            # Legg til en feilmelding ved unntak
+            messages.error(request, f"Feil ved oppdatering av temperatur: {e}")
+
+        # Omdiriger tilbake til riktig device_detail URL
+        return redirect('device_detail', device_type=device_type, id=id)
+
+    messages.error(request, "Invalid request method.")
+    return redirect(reverse('device_detail', kwargs={'device_type': device_type, 'id': id}))
+    #return render(request, 'device_detail.html', {'device': device, 'device_type': device_type})
+
+
+
+@login_required
 def new_device_list(request):
     return render(request, 'new_device_list.html')
 
@@ -197,3 +225,26 @@ def delete_device_view(request, device_type, id):
 
 
     return render(request, 'delete_device.html', {'device': device, 'device_type': device_type})
+
+@login_required
+def toggle_light(request, device_type, id):
+
+    if device_type != "smartbulb":
+        return redirect('device_detail', device_type=device_type, id=id)
+
+    bulb = get_object_or_404(SmartBulb, id=id)
+
+    try:
+        if bulb.is_on:
+
+            response_message = bulb.turn_off()
+            messages.success(request, response_message)
+        else:
+            #
+            response_message = bulb.turn_on()
+            messages.success(request, response_message)
+    except Exception as e:
+        messages.error(request, f"Failed to toggle light: {e}")
+
+
+    return redirect('device_detail', device_type=device_type, id=id)
