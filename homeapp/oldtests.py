@@ -89,7 +89,9 @@ class SmartThermostatViewTest(unittest.TestCase):
         # Step 2: Assertions using core Python `assert`
         assert response.status_code == 404  # Check for 404 response indicating not found
 
-    # ******* CarCharger Tests ********
+
+
+# ******* CarCharger Tests ********
 
 class CarChargerUnitTests(TestCase):
     def setUp(self):
@@ -177,3 +179,5 @@ class CarChargerUnitTests(TestCase):
         self.car_charger.save()
         result = self.car_charger.calculate_estimated_charging_time_in_minutes()
         self.assertEqual(result, "Battery is already fully charged.")
+
+
