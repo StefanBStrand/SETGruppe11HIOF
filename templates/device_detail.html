@@ -12,10 +12,9 @@ Beskrivelse: {{device.description}}
 
     <h5>Detaljer for: {{device.name}}</h5>
     <p>Rom enheten befinner seg i: {{device.room}}. Type enhet: {{ device.get_device_type }}</p>
-    {% if device.is_on %}
-        {{device.name}} er slått på.
-    {% else %}
-    {{device.name}} er slått av.
+    {% if device.get_device_type == 'smartthermostat' %}
+        {{ device.get_temperature }}
+
     {% endif %}
     </p>
 <button class="device-button"><a href="{% url 'update_device' device.get_device_type device.id %}">Oppdater enhet</a></button>
