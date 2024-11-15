@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2></h2>
+
+Navn: {{device.name}}
+
+Beskrivelse: {{device.description}}
+
+
+
+
+    <h5>Detaljer for: {{device.name}}</h5>
+    <p>Rom enheten befinner seg i: {{device.room}}. Type enhet: {{ device.get_device_type }}</p>
+    {% if device.is_on %}
+        {{device.name}} er slått på.
+    {% else %}
+    {{device.name}} er slått av.
+    {% endif %}
+    </p>
+<button class="device-button"><a href="{% url 'update_device' device.get_device_type device.id %}">Oppdater enhet</a></button>
+<button class="device-button"><a href="{% url 'delete_device' device.get_device_type device.id %}">Slette enhet</a></button>
+
+
+
+{% endblock content %}

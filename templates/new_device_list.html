@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Legg til ny enhet!</h1>
+<h2>Velg type enhent du ønsker å legge til i ditt smarthjem:</h2>
+
+
+<a href="{% url 'new_device' 'carcharger' %}" class="device-button">Elbillader</a>
+<a href="{% url 'new_device' 'smartthermostat' %}" class="device-button">Termostat / termometer</a>
+<a href="{% url 'new_device' 'smartbulb' %}" class="device-button">Smartpære</a>
+
+
+<p>Mye nytt? Ikke vær redd. Vi guider deg gjennom prosessen!</p>
+<p>Er det noe du savner? Gi oss beskjed!</p>
+
+{% endblock content %}

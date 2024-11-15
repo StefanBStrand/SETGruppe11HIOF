@@ -2,20 +2,48 @@
 
 {% block content %}
 
-   <section class="device-grid">
-        <p>DUMMYTEKST FOR TESTING</p>
-        <button class="device-button">Elbillader</button>
-        <a href="{% url 'thermostat_detail' id=13 %}" class="device-button">Termostat</a>
-        <button class="device-button">Musikkanlegg</button>
-        <button class="device-button">Default</button>
-        <button class="device-button">Default</button>
-        <button class="device-button">Default</button>
+
+<p>Hei, {{ user.first_name }}</p>
+<p>Velkommen til ditt hjem!</p>
+<p>For å endre ditt hjem eller legge til rom - trykk på tannhjulet!</p>
+
+<section class="device-grid">
+
+{% for room in rooms %}
+    <div class="room-container">
+    <h2><b>{{ room.name }}</b></h2>
+{% for charger in chargers %}
+        {% if charger.room == room %}
+        <button class="device-button"><a href="{% url 'device_detail' charger.get_device_type charger.id %}">{{ charger.name }}</a></button>
+        {% endif %}
+    {% endfor %}
+
+
+    {% for thermostat in thermostats %}
+        {% if thermostat.room == room %}
+        <button class="device-button"><a href="{% url 'device_detail' thermostat.get_device_type thermostat.id %}">{{ thermostat.name }}</a></button>
+        {% endif %}
+    {% endfor %}
+
+            {% for smartbulb in smartbulbs %}
+        {% if smartbulb.room == room %}
+        <button class="device-button"><a href="{% url 'device_detail' smartbulb.get_device_type smartbulb.id %}">{{ smartbulb.name }}</a></button>
+        {% endif %}
+    {% endfor %}
+
+
+
+        </div>
+{% endfor %}
+
    </section>
-<div class="circle">
-        <h2>Utetemperatur</h2>
-        <p>{{ air_temperature }} °C</p>
-        <p>{{ home.city }} </p>
+
+    <div class="circle">
+            <h2>Utetemperatur</h2>
+            <p>{{ air_temperature }} °C</p>
+            <p>{{ home.city }} </p>
     </div>
+
 
 
 

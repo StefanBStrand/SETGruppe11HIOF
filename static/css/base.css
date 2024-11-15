@@ -15,8 +15,12 @@ body {
 .container {
     width: 100%;
     max-width: 600px;
+    align-content: center;
+    padding: 20px;
+
 
 }
+
 
 header {
     margin: 20px 0;
@@ -57,22 +61,27 @@ button:hover {
 }
 
 
+
+
 .device-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    width: 100%;
 }
+
 
 .device-button {
     background-color: #505050;
-    border-radius: 15px;
-    padding: 15px;
+    margin-top: 8px;
+    display: block;
     text-align: center;
-    font-size: 18px;
-
-
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
 }
+
+
+
 
 .device-button:focus {
     background-color: beige;
@@ -124,6 +133,7 @@ footer {
     flex-direction: column;
     color: #ccc;
     font-family: Arial, sans-serif;
+    float: left;
 }
 
 .circle h2 {
@@ -138,3 +148,23 @@ footer {
     padding: 5px;
 }
 
+a {
+    color: #fff; /* Set the color you want for the links */
+    text-decoration: none; /* Remove underline if desired */
+}
+
+a:visited {
+    color: #fff; /* Ensure visited links have the same color */
+}
+
+a:hover {
+    color: #ccc; /* Optional: Change color on hover */
+}
+
+.room-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    width: 200px;
+}
