@@ -130,6 +130,35 @@ class CarCharger(SmartDevice):
         return "Estimated charging time: {:.2f} minutes.".format(charging_time_minutes_to_full)
 
 
+# Getters
+    def get_battery_capacity(self):
+        # Returns the total battery capacity of the car.
+        return self.car_battery_capacity
+
+    def get_battery_charge(self):
+        # Returns the current charge level of the car battery.
+        return self.car_battery_charge
+
+    def get_is_connected_status(self):
+        # Returns whether the car is connected to the charger.
+        return self.is_connected_to_car
+
+    def get_is_charging_status(self):
+        # Returns whether the charger is actively charging.
+        return self.is_charging
+
+    def get_max_power_output(self):
+        # Returns the maximum power output of the charger.
+        return self.max_power_output
+
+    def get_current_power_consumption(self):
+        # Returns the current power consumption rate during charging.
+        return self.power_consumption
+
+    def get_total_power_consumption(self):
+        # Returns the total power consumption of the charger.
+        return self.total_power_consumption
+
 class SmartBulb(SmartDevice):
     COLOR_CHOICES = [
         ('white', 'White'),
