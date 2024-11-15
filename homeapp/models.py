@@ -1,5 +1,5 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from .services import *
 # Create your models here.
 
 
@@ -25,7 +25,7 @@ class Home(models.Model):
         lon = 10.58
 
 
-    def str(self):
+    def __str__(self):
         return f"{self.name}"
 
 
@@ -38,12 +38,19 @@ class Room(models.Model):
 
 
 class SmartDevice(models.Model):
-    device_type = models.CharField(max_length=50, null=True, blank=True)
     name = models.CharField(max_length=128)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
     owner = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True)
     description = models.TextField(blank=True)
     is_on = models.BooleanField(default=False)
+    device_type = models.CharField(max_length=50, default='smartdevice')
+
+    def save(self, *args, **kwargs):
+        # Bare sett device_type hvis det ikke allerede er satt
+        if not self.device_type:
+            self.device_type = self.DEVICE_TYPE  # Bruk konstanten fra underklassen
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.name
@@ -57,6 +64,12 @@ class CarCharger(SmartDevice):
     max_power_output = models.IntegerField(default=60)
     power_consumption = models.IntegerField(default=0)
     total_power_consumption = models.IntegerField(default=0)
+    device_type = 'carcharger'
+
+
+    def get_device_type(self):
+        return "carcharger"
+
 
     def fetch_data(self):
         # Fetches car charger data from a stub simulating the external system.
@@ -76,41 +89,25 @@ class CarCharger(SmartDevice):
         return "Failed to fetch data from the external system."
 
     def start_charging(self, power_rate):
-        # Sends a start charging command to the external system.
-        # Updates local charging status on success.
-        if not self.is_connected_to_car:
-            return "Car is not connected. Cannot start charging."
-        
-        if power_rate == 0:
-            return "Cannot start charging with 0 kwh. Choose valid power rate"
-        
-        if power_rate > self.max_power_output:
-            return "Power rate exceeds maximum output capacity."
 
-        response = send_charging_status_to_external_system(power_rate, start=True)
-        if response["response"] == "success":
-            self.power_consumption = power_rate  # Update local power consumption
-            self.is_charging = True  # Mark as charging
+        if not self.is_connected_to_car:
+            raise ValueError("Car is not connected. Please connect the car to start charging.")
+        if power_rate <= self.max_power_output:
+            self.power_consumption = power_rate
+            self.is_charging = True
             self.save()
-            return f"Charging started at {power_rate} kW."
-        return "Failed to start charging."
+            return "Charging started at {} kW.".format(power_rate)
 
     def stop_charging(self, charging_minutes):
-        # Sends a stop charging command to the external system.
-        # Updates local charging status on success.
-        if not self.is_connected_to_car or not self.is_charging:
-            return "No active charging session to stop."
 
-        response = send_charging_status_to_external_system(0, start=False)
-        if response["response"] == "success":
-            # Calculate total power consumed during the charging session
-            total_consumed = self.power_consumption * charging_minutes / 60
-            self.total_power_consumption += total_consumed  # Update total power consumption
-            self.power_consumption = 0  # Reset current power consumption
-            self.is_charging = False  # Mark as not charging
+        if self.is_connected_to_car and self.power_consumption > 0 and self.is_charging:
+            self.is_charging = False
+            total_consumed = self.power_consumption * charging_minutes
+            self.total_power_consumption += total_consumed
+            self.power_consumption = 0
             self.save()
-            return f"Charging stopped. Total power consumed: {total_consumed:.2f} kWh."
-        return "Failed to stop charging."
+            return "Charging stopped. Total power consumed: {} kWh.".format(total_consumed)
+        return "No active charging session to stop."
 
     def reset_power_consumption(self):
 
@@ -132,34 +129,6 @@ class CarCharger(SmartDevice):
         charging_time_minutes_to_full = (remaining_capacity / (self.power_consumption)) * 60
         return "Estimated charging time: {:.2f} minutes.".format(charging_time_minutes_to_full)
 
-    # Getters
-    def get_battery_capacity(self):
-        # Returns the total battery capacity of the car.
-        return self.car_battery_capacity
-
-    def get_battery_charge(self):
-        # Returns the current charge level of the car battery.
-        return self.car_battery_charge
-
-    def get_is_connected_status(self):
-        # Returns whether the car is connected to the charger.
-        return self.is_connected_to_car
-
-    def get_is_charging_status(self):
-        # Returns whether the charger is actively charging.
-        return self.is_charging
-
-    def get_max_power_output(self):
-        # Returns the maximum power output of the charger.
-        return self.max_power_output
-
-    def get_current_power_consumption(self):
-        # Returns the current power consumption rate during charging.
-        return self.power_consumption
-
-    def get_total_power_consumption(self):
-        # Returns the total power consumption of the charger.
-        return self.total_power_consumption
 
 class SmartBulb(SmartDevice):
     COLOR_CHOICES = [
