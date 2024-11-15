@@ -6,9 +6,27 @@ from .services import *
 class Home(models.Model):
     name = models.CharField(max_length=128)
     owner = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True)
+    CITY_CHOICES = [
+        ('Fredrikstad', 'Fredrikstad'),
+        ('Sarpsborg', 'Sarpsborg'),
+        ('Nesodden', 'Nesodden'),]
+    city = models.CharField(max_length=128, choices=CITY_CHOICES ,blank=False, default='Fredrikstad')
+    lat = models.FloatField(default=59.21)
+    lon = models.FloatField(default=10.92)
 
-    def __str__(self):
-        return f"{self.name} ({self.owner.username})"
+    if city == 'Fredrikstad':
+        lat = 59.21
+        lon = 10.92
+    elif city == 'Sarpsborg':
+        lat = 59.28
+        lon = 11.11
+    elif city == 'Nesodden':
+        lat = 59.84
+        lon = 10.58
+
+
+    def str(self):
+        return f"{self.name}"
 
 
 class Room(models.Model):
