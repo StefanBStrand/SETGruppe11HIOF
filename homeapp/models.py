@@ -57,6 +57,7 @@ class CarCharger(SmartDevice):
     max_power_output = models.IntegerField(default=60)
     power_consumption = models.IntegerField(default=0)
     total_power_consumption = models.IntegerField(default=0)
+    device_type = 'carcharger'
 
     def fetch_data(self):
         # Fetches car charger data from a stub simulating the external system.
@@ -133,6 +134,10 @@ class CarCharger(SmartDevice):
         return "Estimated charging time: {:.2f} minutes.".format(charging_time_minutes_to_full)
 
     # Getters
+
+    def get_device_type(self):
+        return "carcharger"
+    
     def get_battery_capacity(self):
         # Returns the total battery capacity of the car.
         return self.car_battery_capacity
@@ -173,6 +178,7 @@ class SmartBulb(SmartDevice):
 
     brightness = models.IntegerField(default=100)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
+    device_type = 'smartbulb'
 
     def fetch_data(self):
         # Fetches SmartBulb data from a stub simulating the external system.
@@ -229,6 +235,12 @@ class SmartBulb(SmartDevice):
         return "Failed to turn off the SmartBulb."
     
     # Getters
+    def get_device_type(self):
+        return "smartbulb"
+
+    def get_device_type(self):
+        return "smartbulb"
+    
     def get_brightness(self):
         # Returns the current brightness level
         return self.brightness
@@ -243,9 +255,10 @@ class SmartBulb(SmartDevice):
 
 
 class SmartThermostat(SmartDevice):
-    temperature_in_room = models.IntegerField()
-    set_temperature = models.IntegerField(default=22)  
-    humidity = models.IntegerField()
+    temperature_in_room = models.IntegerField(blank=True, null=True)
+    set_temperature = models.IntegerField(default=22, validators=[MinValueValidator(5), MaxValueValidator(30)])  # TODO Change field to current_temperature.
+    humidity = models.IntegerField(blank=True, null=True)
+    device_type = 'smartthermostat'
 
     # Adding a mode field with possible choices
     MODE_CHOICES = [
