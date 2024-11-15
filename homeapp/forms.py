@@ -1,5 +1,6 @@
 from django import forms
-from .models import SmartThermostat, SmartBulb
+from .models import SmartThermostat, SmartBulb, CarCharger
+
 
 class SmartThermostatForm(forms.ModelForm):
     class Meta:
@@ -7,7 +8,29 @@ class SmartThermostatForm(forms.ModelForm):
         fields = ['name', 'set_temperature', 'room']
 
         labels = {
-            "name": "Navn på enhet",
+            "name": "Visningsnavn på termostat",
             "room": "Rom enheten skal være i",
             "set_temperature": "Ønsket temperatur",
+        }
+
+class SmartBulbForm(forms.ModelForm):
+    class Meta:
+        model = SmartBulb
+        fields = ['name', 'color', 'room']
+
+        labels = {
+            "name": "Visningsnavn på smartpære",
+            "room": "Rom enheten skal være i",
+
+        }
+
+class CarChargerForm(forms.ModelForm):
+    class Meta:
+        model = CarCharger
+        fields = ['name', 'room']
+
+        labels = {
+            "name": "Visningsnavn på lader",
+            "room": "Rom enheten skal være i",
+
         }

@@ -16,8 +16,14 @@ urlpatterns = [
     path('', views.home_view, name='home'),
     path('create_smart_thermostat_device/', views.create_smart_thermostat_device_view, name='create_smart_thermostat_device'),
     path('update_thermostat/<int:id>/', views.update_thermostat, name='update_thermostat'),
-    path('delete_device/<int:id>/', views.delete_smart_thermostat_device_view, name='delete_device'),
+    path('new_device_list/', views.new_device_list, name='new_device_list'),
+    path('new_device/<str:device_type>/', views.new_device, name='new_device'),
+    path('settings/', views.settings, name='settings'),
+    path('delete_device/<str:device_type>/<int:id>/', views.delete_device_view, name='delete_device'),
+    path('device/<str:device_type>/<int:id>/', views.device_detail_view, name='device_detail'),
+    path('update_device/<str:device_type>/<int:id>/', views.update_device_view, name='update_device'),
     path('thermostat/<int:id>/', views.thermostat_detail, name='thermostat_detail'),
+    path('device/<int:id>/', views.device_detail_view, name='device_detail'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout')
 ]

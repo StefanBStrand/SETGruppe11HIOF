@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 # Create your models here.
 
@@ -42,6 +43,14 @@ class SmartDevice(models.Model):
     owner = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True)
     description = models.TextField(blank=True)
     is_on = models.BooleanField(default=False)
+    device_type = models.CharField(max_length=50, default='smartdevice')
+
+    def save(self, *args, **kwargs):
+        # Bare sett device_type hvis det ikke allerede er satt
+        if not self.device_type:
+            self.device_type = self.DEVICE_TYPE  # Bruk konstanten fra underklassen
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.name
@@ -55,6 +64,14 @@ class CarCharger(SmartDevice):
     max_power_output = models.IntegerField(default=60)
     power_consumption = models.IntegerField(default=0)
     total_power_consumption = models.IntegerField(default=0)
+    device_type = 'carcharger'
+
+
+    def get_device_type(self):
+        return "carcharger"
+
+
+
 
     def connect_to_car(self):
         if not self.is_connected_to_car:
@@ -123,6 +140,10 @@ class SmartBulb(SmartDevice):
 
     brightness = models.IntegerField(default=100)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
+    device_type = 'smartbulb'
+    def get_device_type(self):
+        return "smartbulb"
+
 
 
     def turn_on(self):
@@ -144,10 +165,13 @@ class SmartBulb(SmartDevice):
             self.color = new_color
             print(f"Color set to {new_color}.")
 
+
+
 class SmartThermostat(SmartDevice):
     temperature_in_room = models.IntegerField(blank=True, null=True)
-    set_temperature = models.IntegerField(default=22)  # TODO Change field to current_temperature.
+    set_temperature = models.IntegerField(default=22, validators=[MinValueValidator(5), MaxValueValidator(30)])  # TODO Change field to current_temperature.
     humidity = models.IntegerField(blank=True, null=True)
+    device_type = 'smartthermostat'
 
     # Adding a mode field with possible choices
     MODE_CHOICES = [
@@ -156,6 +180,8 @@ class SmartThermostat(SmartDevice):
         ('off', 'Off'),
     ]
     mode = models.CharField(max_length=10, choices=MODE_CHOICES, default='off')
+    def get_device_type(self):
+        return "smartthermostat"
 
     def get_temperature(self):
         return self.temperature_in_room

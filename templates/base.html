@@ -11,12 +11,12 @@
 <body>
     <div class="container">
     <header>
-        <h1>EasyHome</h1>
+        <h1><a href="{% url 'home' %}">EasyHome</a></h1>
     </header>
 
     <nav>
-        <button id="home-btn" class="icon-button">🏠</button>
-        <button id="devices-btn">Enheter i {{ home }}</button>
+        <button id="home-btn" class="icon-button"><a href="{% url 'home' %}">🏠</a></button>
+
         <button id="settings-btn" class="icon-button">⚙️</button>
     </nav>
 
@@ -28,7 +28,7 @@
 
             <footer>
 
-        <button class="add-device"><a href="{% url 'create_smart_thermostat_device'  %}">Legg til enhet +</a></button>
+        <button class="add-device"><a href="{% url 'new_device_list'  %}">Legg til enhet +</a></button>
         <button class="devices-settings">Enheter ⚙️</button>
     </footer>
 </div>

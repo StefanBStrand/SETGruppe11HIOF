@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'homeapp',
+    'homeapp', #Hovedapplikasjonen.Vi har samlet alle funksjoner i denne appen
+    'crispy_forms', #Library for å lage forms (skjemaer) i Django mye penere og enklere
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +131,6 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
