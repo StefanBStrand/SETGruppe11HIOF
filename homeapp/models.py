@@ -77,14 +77,11 @@ class CarCharger(SmartDevice):
 
 
     def fetch_data(self):
-
         data = fetch_carcharger_data_from_external_system()
         if data["response"] == "success":
-            # Update connection status if changed
             if data["is_connected_to_car"] != self.is_connected_to_car:
                 self.is_connected_to_car = data["is_connected_to_car"]
 
-            # Update other fields based on the fetched data
             self.car_battery_capacity = data["car_battery_capacity"]
             self.car_battery_charge = data["car_battery_charge"]
             self.is_charging = data["is_charging"]
@@ -193,7 +190,6 @@ class SmartBulb(SmartDevice):
         return "Failed to update brightness."
 
     def update_color(self, new_color):
-        # Checks if the new color value is valid
         if new_color not in dict(self.COLOR_CHOICES):
             return f"Invalid color value. Must be one of: {', '.join(dict(self.COLOR_CHOICES).keys())}."
 
@@ -205,7 +201,6 @@ class SmartBulb(SmartDevice):
         return "Failed to update color."
 
     def turn_on(self):
-
         response = send_turn_on_to_external_system()
         if response["response"] == "success":
             self.is_on = True
@@ -214,7 +209,6 @@ class SmartBulb(SmartDevice):
         return "Failed to turn on the SmartBulb."
 
     def turn_off(self):
-
         response = send_turn_off_to_external_system()
         if response["response"] == "success":
             self.is_on = False
@@ -249,7 +243,6 @@ class SmartThermostat(SmartDevice):
     mode = models.CharField(max_length=10, choices=MODE_CHOICES, default='off')
 
     def fetch_data(self):
-        
         data = fetch_thermostat_data_from_external_system()
         if data:
             self.temperature_in_room = data["current_temperature"]
@@ -288,13 +281,4 @@ class SmartThermostat(SmartDevice):
 
     def get_mode(self):
         return self.mode
-
-
-
-
-        
-    # Send request to Mock-api --> api.update_temperature()
-    # Mock-apiet returnerer True/false basert på om det har gått ok.
-    # Denne metoden returnerer denne true/false videre tilbake til controller (view)
-
 
