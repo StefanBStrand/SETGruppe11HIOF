@@ -21,8 +21,7 @@ class SmartBulbForm(forms.ModelForm):
         labels = {
             "name": "Visningsnavn på smartpære",
             "room": "Rom enheten skal være i",
-            "is_on": "Pære på",
-
+            "is_on": "Pære på"
         }
 
 class CarChargerForm(forms.ModelForm):

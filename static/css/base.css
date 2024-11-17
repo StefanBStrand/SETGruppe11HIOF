@@ -26,7 +26,6 @@ body.dark-mode {
 }
 
 
-
 .container {
     width: 100%;
     max-width: 600px;
@@ -75,9 +74,6 @@ button:hover {
     background-color: #8b8a8a;
 }
 
-
-
-
 .device-grid {
     display: flex;
     flex-wrap: wrap;
@@ -94,9 +90,6 @@ button:hover {
     border: none;
     border-radius: 4px;
 }
-
-
-
 
 .device-button:focus {
     background-color: beige;
@@ -164,16 +157,16 @@ footer {
 }
 
 a {
-    color: #fff; /* Set the color you want for the links */
-    text-decoration: none; /* Remove underline if desired */
+    color: #fff;
+    text-decoration: none;
 }
 
 a:visited {
-    color: #fff; /* Ensure visited links have the same color */
+    color: #fff;
 }
 
 a:hover {
-    color: #ccc; /* Optional: Change color on hover */
+    color: #ccc;
 }
 
 .room-container {

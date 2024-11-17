@@ -4,7 +4,6 @@
 
     <h1>Thermostat Status</h1>
 
-    <!-- Displaying the thermostat details -->
     <p>Temperature: {{ thermostat.set_temperature }}</p>
     <p>Mode: {{ thermostat.mode }}</p>
     <p>Humidity: {{ thermostat.humidity }}</p>
@@ -22,12 +21,10 @@
 
     <script>
 
-    // Function to update the displayed temperature value in real-time...
     function updateSliderValue(value) {
         document.getElementById('sliderValue').textContent = value;
     }
 
-    // Send the new temperature setting to the server on slider adjustment...ø
     document.getElementById('temperatureSlider').addEventListener('change', function() {
         fetch("{% url 'update_thermostat' thermostat.id %}", {
             method: 'POST',

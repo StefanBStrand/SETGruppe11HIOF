@@ -77,8 +77,7 @@ class CarCharger(SmartDevice):
 
 
     def fetch_data(self):
-        # Fetches car charger data from a stub simulating the external system.
-        # Updates local status if a change is detected.
+
         data = fetch_carcharger_data_from_external_system()
         if data["response"] == "success":
             # Update connection status if changed
@@ -135,33 +134,25 @@ class CarCharger(SmartDevice):
         return "Estimated charging time: {:.2f} minutes.".format(charging_time_minutes_to_full)
 
 
-# Getters
     def get_battery_capacity(self):
-        # Returns the total battery capacity of the car.
         return self.car_battery_capacity
 
     def get_battery_charge(self):
-        # Returns the current charge level of the car battery.
         return self.car_battery_charge
 
     def get_is_connected_status(self):
-        # Returns whether the car is connected to the charger.
         return self.is_connected_to_car
 
     def get_is_charging_status(self):
-        # Returns whether the charger is actively charging.
         return self.is_charging
 
     def get_max_power_output(self):
-        # Returns the maximum power output of the charger.
         return self.max_power_output
 
     def get_current_power_consumption(self):
-        # Returns the current power consumption rate during charging.
         return self.power_consumption
 
     def get_total_power_consumption(self):
-        # Returns the total power consumption of the charger.
         return self.total_power_consumption
 
 class SmartBulb(SmartDevice):
@@ -182,7 +173,6 @@ class SmartBulb(SmartDevice):
 
 
     def fetch_data(self):
-        # Fetches SmartBulb data from a stub simulating the external system.
         data = fetch_smartbulb_data_from_external_system()
         if data:
             self.is_on = data["is_on"]
@@ -192,11 +182,9 @@ class SmartBulb(SmartDevice):
         return data
 
     def update_brightness(self, new_brightness):
-        # Checks if the new brightness value is valid
         if not (0 <= new_brightness <= 100):
             return "Invalid brightness value. Must be between 0 and 100."
-        
-        # Updates the brightness of the SmartBulb via a stub simulating the external system.
+
         response = send_brightness_update_to_external_system(new_brightness)
         if response["response"] == "success":
             self.brightness = response["updated_brightness"]
@@ -208,8 +196,7 @@ class SmartBulb(SmartDevice):
         # Checks if the new color value is valid
         if new_color not in dict(self.COLOR_CHOICES):
             return f"Invalid color value. Must be one of: {', '.join(dict(self.COLOR_CHOICES).keys())}."
-        
-        # Updates the color of the SmartBulb via a stub simulating the external system.
+
         response = send_color_update_to_external_system(new_color)
         if response["response"] == "success":
             self.color = response["updated_color"]
@@ -218,7 +205,7 @@ class SmartBulb(SmartDevice):
         return "Failed to update color."
 
     def turn_on(self):
-        # Turns on the SmartBulb via a stub simulating the external system.
+
         response = send_turn_on_to_external_system()
         if response["response"] == "success":
             self.is_on = True
@@ -227,7 +214,7 @@ class SmartBulb(SmartDevice):
         return "Failed to turn on the SmartBulb."
 
     def turn_off(self):
-        # Turns off the SmartBulb via a stub simulating the external system.
+
         response = send_turn_off_to_external_system()
         if response["response"] == "success":
             self.is_on = False
@@ -237,15 +224,12 @@ class SmartBulb(SmartDevice):
     
     # Getters
     def get_brightness(self):
-        # Returns the current brightness level
         return self.brightness
 
     def get_color(self):
-        # Returns the current color of the SmartBulb
         return self.color
 
     def get_is_on_status(self):
-        # Returns whether the SmartBulb is currently on
         return self.is_on
 
 
@@ -257,7 +241,6 @@ class SmartThermostat(SmartDevice):
     def get_device_type(self):
         return "smartthermostat"
 
-    # Adding a mode field with possible choices
     MODE_CHOICES = [
         ('cool', 'Cooling'),
         ('heat', 'Heating'),
@@ -266,8 +249,6 @@ class SmartThermostat(SmartDevice):
     mode = models.CharField(max_length=10, choices=MODE_CHOICES, default='off')
 
     def fetch_data(self):
-        
-        # Fetches thermostat data from a stub simulating the external system. Could run at intervals and look for changes.
         
         data = fetch_thermostat_data_from_external_system()
         if data:
@@ -280,8 +261,6 @@ class SmartThermostat(SmartDevice):
 
     def update_temperature(self, new_temperature):
         
-        # Updates the thermostat's temperature via a stub simulating the external system.
-        
         response = send_temperature_update_to_external_system(new_temperature)
         if response["response"] == "success":
             self.set_temperature = response["updated_temperature"]
@@ -291,8 +270,6 @@ class SmartThermostat(SmartDevice):
 
     def update_mode(self, new_mode):
         
-        # Updates the thermostat's mode via a stub simulating the external system.
-        
         response = send_mode_update_to_external_system(new_mode)
         if response["response"] == "success":
             self.mode = response["updated_mode"]
@@ -301,19 +278,15 @@ class SmartThermostat(SmartDevice):
         return "Failed to update mode."
 
     def get_temperature(self):
-        # Returns the current room temperature
         return self.temperature_in_room
 
     def get_set_temperature(self):
-        # Returns the desired temperature (set point)
         return self.set_temperature
 
     def get_humidity(self):
-        # Returns the current humidity level
         return self.humidity
 
     def get_mode(self):
-        # Returns the current operating mode of the thermostat
         return self.mode
 
 
@@ -325,11 +298,3 @@ class SmartThermostat(SmartDevice):
     # Denne metoden returnerer denne true/false videre tilbake til controller (view)
 
 
-    # TODO: method for view humidity
-    # TODO: method for update mode.
-    # TODO: method for view mode.
-    # TODO: Teller positivt med lagring i db - funksjonene (SmartThermostat) må snakke med djangoDB.
-
-
-    #TODO: Trykk på knapp i interfacet for å sette ny temperatur --> Kaller på funksjon i Controller (View)
-    # --> Som igjen kaller på update_temperature-metode i Model

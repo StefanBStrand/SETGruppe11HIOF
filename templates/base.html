@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
-
     <div class="container">
     <header>
         <h1><a href="{% url 'home' %}">EasyHome</a></h1>
@@ -17,17 +16,14 @@
 
     <nav>
         <button id="home-btn" class="icon-button"><a href="{% url 'home' %}">🏠</a></button>
-
         <button id="settings-btn" class="icon-button"><a href="{% url 'settings' %}">⚙️</a></button>
-
     </nav>
-
         <script>
 
     setTimeout(function() {
         const messages = document.getElementById('messages');
         if (messages) {
-            messages.style.display = 'none'; // Skjuler meldingen
+            messages.style.display = 'none';
         }
     }, 3000);
 
@@ -43,10 +39,10 @@ if (savedTheme) {
 function toggleTheme() {
     if (body.classList.contains('dark-mode')) {
         body.classList.remove('dark-mode');
-        localStorage.setItem('theme', ''); // Fjern lagret tema
+        localStorage.setItem('theme', '');
     } else {
         body.classList.add('dark-mode');
-        localStorage.setItem('theme', 'dark-mode'); // Lagre tema
+        localStorage.setItem('theme', 'dark-mode');
     }
 }
 </script>
