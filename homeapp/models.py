@@ -250,7 +250,7 @@ class SmartBulb(SmartDevice):
 
 
 class SmartThermostat(SmartDevice):
-    temperature_in_room = models.IntegerField()
+    temperature_in_room = models.IntegerField(default=22)
     set_temperature = models.IntegerField(default=22)  
     humidity = models.IntegerField(default=50)
 
