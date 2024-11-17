@@ -118,3 +118,4 @@ dmypy.json
 
 # Custom
 .DS_Store
+homeapp/migrations/0012_alter_smartbulb_color_alter_smartthermostat_humidity_and_more.py
