@@ -17,9 +17,15 @@ def home_view(request):
     user = request.user
 
     home = Home.objects.filter(owner=user).first()
-    lon = home.lon
-    lat = home.lat
-    air_temperature, humidity, wind = fetch_weather_data(lat, lon)
+    if home is None:
+        lon = 59.21
+        lat = 10.92
+        air_temperature, humidity, wind = fetch_weather_data(lat, lon)
+    else:
+        lon = home.lon
+        lat = home.lat
+        air_temperature, humidity, wind = fetch_weather_data(lat, lon)
+
 
     context = {
         'user': user,
@@ -123,17 +129,13 @@ def thermostat_detail(request, id):
 @login_required
 def update_device_temperature(request, device_type, id):
     if request.method == "POST":
-        # Hent enheten basert på device_type og id
         device = get_object_or_404(SmartThermostat, id=id)
-
-
-        # Hent ny temperatur fra POST-data
         new_temperature = int(request.POST.get('temperature'))
 
         try:
-            # Kall modellen sin metode for oppdatering
+
             response_message = device.update_temperature(new_temperature)
-            # Legg til en suksessmelding
+
             messages.success(request, response_message)
         except Exception as e:
             # Legg til en feilmelding ved unntak
