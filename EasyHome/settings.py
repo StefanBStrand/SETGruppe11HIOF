@@ -134,3 +134,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+import os
+print("Current Working Directory:", os.getcwd())
+
+from decouple import AutoConfig
+
+config = AutoConfig(search_path="C:/Users/susan/Documents/GitHub/SETGruppe11HIOF")
+SECRET_KEY = config("SECRET_KEY")
+
+from decouple import config
+
+SECRET_KEY = config("SECRET_KEY", default="fallback-secret-key")
+
+import os
+from decouple import AutoConfig
+
+config = AutoConfig(search_path=os.getcwd())
+print("SECRET_KEY:", config("SECRET_KEY", default="Not Found"))
