@@ -1,0 +1,89 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor MainUser as muser
+entity View as view
+entity Model as model
+database Database as db
+boundary Template as tp
+
+activate tp
+muser -> tp : Click on "Room"
+
+tp -> view : "Change Screen" request
+activate view
+
+view --> tp : Update Screen
+deactivate view
+
+tp --> muser : Room Screen and options
+
+muser -> tp : Click on "Bathroom"
+
+tp -> view : Get info on "Bathroom" with id XXX
+activate view
+
+view -> model : Get room_id XXX with details
+activate model
+
+model -> db : Get status on units on room_id XXX
+activate db
+
+db --> model : Return status of units in room_id XXX
+deactivate db
+
+model --> view : Return room_id xxx with status on units
+deactivate model
+
+view --> tp : Show room "Bathroom" with updated status
+deactivate view
+
+tp --> muser : Confirm Room: "Bathroom" and updated units
+
+muser -> tp : Click on "Thermostat"
+
+tp -> view : Show unit_id "Thermostat" status
+activate view
+
+view -> model : Get unit_id "Thermostat" status
+activate model
+
+model -> db : Sending get unit request
+activate db
+
+db --> model : Returning unit status
+deactivate db
+
+model --> view : Updating unit_id status
+deactivate model
+
+view --> tp : Sending unit_id "Thermostat" status in "Bathroom"
+deactivate view
+
+tp --> muser : Show status on "Thermostat" in "Bathroom"
+
+muser -> tp : set "Thermostat" to heat to 25
+
+tp -> view : "Start heating" request
+activate view
+
+view -> model : Update Unit_id "Thermostat" status
+activate model
+
+model -> db : Set Unit_id to "HEAT" to 25
+activate db
+
+db --> model : Confirm Unit_id status
+deactivate db
+
+model --> view : Unit_id "Thermostat"" status updated
+deactivate model
+
+view --> tp : Display: "Heating ON"
+deactivate view
+
+tp --> muser : Confirming "Heating ON" to 25
+
+@enduml
