@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+hide empty description
+
+state "Action Car Carger" as actioncarcharg
+[*] --> actioncarcharg
+
+state Check_Car_Connected {
+[*] --> Communicate_Car
+Communicate_Car --> new_charging_choice : Stop_or_continue
+Communicate_Car --> Success
+Communicate_Car --> UnSuccess
+UnSuccess --> Error_message
+Error_message --> Communicate_Car : try again
+Success --> message_use
+message_use --> Start_Charging
+message_use --> Stop_Charging
+}
+
+state Start_Charging {
+[*] --> charging_state
+charging_state --> change_charging_state
+change_charging_state --> send_charging_message
+charging_state --> send_charging_message
+charging_state --> change_kW
+change_kW --> send_charging_message
+send_charging_message --> start_charing
+start_charing --> message_user_charging
+message_user_charging --> charging_state
+charging_state --> message_user_charging
+}
+
+state Stop_Charging {
+[*] --> Stopping
+
+Stopping --> save_stop
+save_stop --> message_user
+}
+
+Stop_Charging --> [*] : Unconnect_car
+Stop_Charging --> Communicate_Car
+
+charging_state --> Stop_Charging
+
+actioncarcharg --> Check_Car_Connected
+
+@enduml

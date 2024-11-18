@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+hide empty description
+
+state "Action Thermostat" as actionthermo
+[*] --> actionthermo : see temperature
+
+state "Idle temperature" as idle
+
+actionthermo --> idle
+
+
+state Heating {
+ [*] --> acivating_cooling
+ acivating_cooling --> Turn_On_Cooling : ready_cooling
+}
+
+idle --> Heating : tooCold(setTemp)
+
+Heating --> Cooling : warm(setTemp)
+
+Heating --> idle : atTemp
+
+state Cooling {
+ [*] --> activating_heating
+ activating_heating --> Turn_On_heating : ready_heating
+}
+
+idle --> Cooling : tooHot((setTemp)
+
+Cooling --> Heating : cold(setTemp)
+
+Cooling --> idle : atTemp
+
+@enduml

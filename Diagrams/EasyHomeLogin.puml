@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+hide empty description
+
+state "EasyHome Login" as login
+
+[*] --> login
+login --> login: Invalid username or password
+login -->[*] : Abort
+
+state usertype <<choice>>
+login --> usertype: Sucess
+usertype --> Ownerpage : User is owner
+usertype --> Guestpage : User is guest
+Ownerpage --> controlsystem
+Ownerpage --> [*] : Logout
+Guestpage --> [*] : Logout
+
+state "Request Access" as accessRequest
+Guestpage --> accessRequest: Request access from Owner
+
+state "Access Granted" as accessGranted
+accessRequest --> accessGranted : Access granted by Owner
+accessGranted --> controlsystem
+
+state "Access Denied" as accessDenied
+accessRequest --> accessDenied : Access denied by Owner
+accessDenied --> [*] : Guest logs out
+
+state "Control System" as controlsystem
+
+
+@enduml
