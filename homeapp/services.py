@@ -26,7 +26,7 @@ def fetch_weather_data(lat, lon):
     else:
         return None
 
-    # stub APi car charger
+# stub APi functions car charger
 
 def fetch_carcharger_data_from_external_system():
     return {
@@ -37,6 +37,7 @@ def fetch_carcharger_data_from_external_system():
         "is_charging": False,
     }
 
+
 def send_charging_status_to_external_system(power_rate, start=True):
     return {
         "response": "success",
@@ -44,7 +45,8 @@ def send_charging_status_to_external_system(power_rate, start=True):
         "action": "start" if start else "stop",
     }
 
-# stub API for smartbulb
+
+# API functions smartbulb
 
 def fetch_smartbulb_data_from_external_system():
     return {
@@ -53,11 +55,13 @@ def fetch_smartbulb_data_from_external_system():
         "color": "blue",
     }
 
+
 def send_brightness_update_to_external_system(new_brightness):
     return {
         "response": "success",
         "updated_brightness": new_brightness,
     }
+
 
 def send_color_update_to_external_system(new_color):
     return {
@@ -65,17 +69,20 @@ def send_color_update_to_external_system(new_color):
         "updated_color": new_color,
     }
 
+
 def send_turn_on_to_external_system():
     return {
         "response": "success",
     }
+
 
 def send_turn_off_to_external_system():
     return {
         "response": "success",
     }
 
-# stub API termostat
+
+# API-stub functions thermostat
 
 def fetch_thermostat_data_from_external_system():
     return {
@@ -85,11 +92,13 @@ def fetch_thermostat_data_from_external_system():
         "mode": "heat",
     }
 
+
 def send_temperature_update_to_external_system(new_temperature):
     return {
         "response": "success",
         "updated_temperature": new_temperature
     }
+
 
 def send_mode_update_to_external_system(new_mode):
     return {

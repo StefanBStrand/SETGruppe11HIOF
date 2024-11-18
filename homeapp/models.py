@@ -1,8 +1,5 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-
-from homeapp.services import send_turn_off_to_external_system, fetch_thermostat_data_from_external_system, \
-    send_temperature_update_to_external_system, send_mode_update_to_external_system, send_turn_on_to_external_system
+from .services import *
 
 
 # Create your models here.
@@ -14,8 +11,8 @@ class Home(models.Model):
     CITY_CHOICES = [
         ('Fredrikstad', 'Fredrikstad'),
         ('Sarpsborg', 'Sarpsborg'),
-        ('Nesodden', 'Nesodden'),]
-    city = models.CharField(max_length=128, choices=CITY_CHOICES ,blank=False, default='Fredrikstad')
+        ('Nesodden', 'Nesodden'), ]
+    city = models.CharField(max_length=128, choices=CITY_CHOICES, blank=False, default='Fredrikstad')
     lat = models.FloatField(default=59.21)
     lon = models.FloatField(default=10.92)
 
@@ -29,8 +26,7 @@ class Home(models.Model):
         lat = 59.84
         lon = 10.58
 
-
-    def __str__(self):
+    def str(self):
         return f"{self.name}"
 
 
@@ -43,19 +39,12 @@ class Room(models.Model):
 
 
 class SmartDevice(models.Model):
+    device_type = models.CharField(max_length=50, null=True, blank=True)
     name = models.CharField(max_length=128)
     room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
     owner = models.ForeignKey("auth.User", on_delete=models.CASCADE, null=True)
     description = models.TextField(blank=True)
     is_on = models.BooleanField(default=False)
-    device_type = models.CharField(max_length=50, default='smartdevice')
-
-    def save(self, *args, **kwargs):
-        # Bare sett device_type hvis det ikke allerede er satt
-        if not self.device_type:
-            self.device_type = self.DEVICE_TYPE  # Bruk konstanten fra underklassen
-        super().save(*args, **kwargs)
-
 
     def __str__(self):
         return self.name
@@ -71,17 +60,11 @@ class CarCharger(SmartDevice):
     total_power_consumption = models.IntegerField(default=0)
     device_type = 'carcharger'
 
-
-    def get_device_type(self):
-        return "carcharger"
-
-
     def fetch_data(self):
         data = fetch_carcharger_data_from_external_system()
         if data["response"] == "success":
             if data["is_connected_to_car"] != self.is_connected_to_car:
                 self.is_connected_to_car = data["is_connected_to_car"]
-
             self.car_battery_capacity = data["car_battery_capacity"]
             self.car_battery_charge = data["car_battery_charge"]
             self.is_charging = data["is_charging"]
@@ -90,25 +73,36 @@ class CarCharger(SmartDevice):
         return "Failed to fetch data from the external system."
 
     def start_charging(self, power_rate):
-
         if not self.is_connected_to_car:
-            raise ValueError("Car is not connected. Please connect the car to start charging.")
-        if power_rate <= self.max_power_output:
+            return "Car is not connected. Cannot start charging."
+
+        if power_rate == 0:
+            return "Cannot start charging with 0 kwh. Choose valid power rate"
+
+        if power_rate > self.max_power_output:
+            return "Power rate exceeds maximum output capacity."
+
+        response = send_charging_status_to_external_system(power_rate, start=True)
+        if response["response"] == "success":
             self.power_consumption = power_rate
             self.is_charging = True
             self.save()
-            return "Charging started at {} kW.".format(power_rate)
+            return f"Charging started at {power_rate} kW."
+        return "Failed to start charging."
 
     def stop_charging(self, charging_minutes):
+        if not self.is_connected_to_car or not self.is_charging:
+            return "No active charging session to stop."
 
-        if self.is_connected_to_car and self.power_consumption > 0 and self.is_charging:
-            self.is_charging = False
-            total_consumed = self.power_consumption * charging_minutes
+        response = send_charging_status_to_external_system(0, start=False)
+        if response["response"] == "success":
+            total_consumed = self.power_consumption * charging_minutes / 60
             self.total_power_consumption += total_consumed
             self.power_consumption = 0
+            self.is_charging = False
             self.save()
-            return "Charging stopped. Total power consumed: {} kWh.".format(total_consumed)
-        return "No active charging session to stop."
+            return f"Charging stopped. Total power consumed: {total_consumed:.2f} kWh."
+        return "Failed to stop charging."
 
     def reset_power_consumption(self):
 
@@ -131,6 +125,10 @@ class CarCharger(SmartDevice):
         return "Estimated charging time: {:.2f} minutes.".format(charging_time_minutes_to_full)
 
 
+
+    def get_device_type(self):
+        return "carcharger"
+
     def get_battery_capacity(self):
         return self.car_battery_capacity
 
@@ -152,6 +150,7 @@ class CarCharger(SmartDevice):
     def get_total_power_consumption(self):
         return self.total_power_consumption
 
+
 class SmartBulb(SmartDevice):
     COLOR_CHOICES = [
         ('white', 'White'),
@@ -164,10 +163,7 @@ class SmartBulb(SmartDevice):
 
     brightness = models.IntegerField(default=100)
     color = models.CharField(max_length=20, choices=COLOR_CHOICES, default='white')
-
-    def get_device_type(self):
-        return "smartbulb"
-
+    device_type = 'smartbulb'
 
     def fetch_data(self):
         data = fetch_smartbulb_data_from_external_system()
@@ -215,8 +211,10 @@ class SmartBulb(SmartDevice):
             self.save()
             return "SmartBulb is now OFF."
         return "Failed to turn off the SmartBulb."
-    
-    # Getters
+
+    def get_device_type(self):
+        return self.device_type
+
     def get_brightness(self):
         return self.brightness
 
@@ -228,12 +226,10 @@ class SmartBulb(SmartDevice):
 
 
 class SmartThermostat(SmartDevice):
-    temperature_in_room = models.IntegerField(default=22)
-    set_temperature = models.IntegerField(default=22)  
-    humidity = models.IntegerField(default=50)
-
-    def get_device_type(self):
-        return "smartthermostat"
+    temperature_in_room = models.IntegerField(blank=True, null=True)
+    set_temperature = models.IntegerField(default=22)  # TODO Change field to current_temperature.
+    humidity = models.IntegerField(blank=True, null=True)
+    device_type = 'smartthermostat'
 
     MODE_CHOICES = [
         ('cool', 'Cooling'),
@@ -243,6 +239,7 @@ class SmartThermostat(SmartDevice):
     mode = models.CharField(max_length=10, choices=MODE_CHOICES, default='off')
 
     def fetch_data(self):
+
         data = fetch_thermostat_data_from_external_system()
         if data:
             self.temperature_in_room = data["current_temperature"]
@@ -253,7 +250,7 @@ class SmartThermostat(SmartDevice):
         return data
 
     def update_temperature(self, new_temperature):
-        
+
         response = send_temperature_update_to_external_system(new_temperature)
         if response["response"] == "success":
             self.set_temperature = response["updated_temperature"]
@@ -262,7 +259,7 @@ class SmartThermostat(SmartDevice):
         return "Failed to update temperature."
 
     def update_mode(self, new_mode):
-        
+
         response = send_mode_update_to_external_system(new_mode)
         if response["response"] == "success":
             self.mode = response["updated_mode"]
@@ -281,4 +278,7 @@ class SmartThermostat(SmartDevice):
 
     def get_mode(self):
         return self.mode
+
+    def get_device_type(self):
+        return self.device_type
 
