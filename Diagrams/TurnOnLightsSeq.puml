@@ -1,0 +1,112 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor MainUser as muser
+entity View as view
+entity Model as model
+database Database as db
+boundary Template as tp
+
+activate view
+view --> tp: Login sucessful, transfer to homescreen
+deactivate view
+
+activate tp
+tp --> muser : Login successful, transfer to homescreen
+
+activate view
+view -> tp: Show Control panel homescreen
+deactivate view
+
+tp --> muser : Show homescreen
+
+muser -> tp : Click on "Units"
+
+tp -> view : "Change Screen" request
+activate view
+
+view --> tp : Update Screen
+deactivate view
+
+tp --> muser : Unit Screen and units options
+
+muser -> tp : Click on "Lights"
+
+tp -> view : "Change Screen to lights unit" request
+activate view
+
+view --> tp : Update Screen to light screen
+deactivate view
+
+tp --> muser : Light Screen and options
+
+muser -> tp : Click on "Choose Room"
+
+tp -> view : "Get Room list" request
+activate view
+
+view -> model : Get Room list
+activate model
+
+model -> db : Get the list of room_id's
+activate db
+
+db --> model : Confirming a list of room_id's
+deactivate db
+
+model --> view : Sending a list of room_id's
+deactivate model
+
+view --> tp : Giving the list of rooms
+deactivate view
+
+tp --> muser : Showing a list of rooms with names
+
+muser -> tp : Click on "living room"
+
+tp -> view : Get info on "living room" with id XXX
+activate view
+
+view -> model : Get room_id XXX with details
+activate model
+
+model -> db : Get status on units on room_id XXX
+activate db
+
+db --> model : Return status of units in room_id XXX
+deactivate db
+
+model --> view : Return room_id xxx with status on units
+deactivate model
+
+view --> tp : Show room "living room"" with updated status
+deactivate view
+
+tp --> muser : Confirm Room: "living room"" and updated units
+
+muser -> tp : Click on "Turn ON" on lights
+
+tp -> view : "Turn Light on" request
+activate view
+
+view -> model : Update Light status
+activate model
+
+model -> db : Set light status to "ON"
+activate db
+
+db --> model : Confirm light status "ON"
+deactivate db
+
+
+model --> view : Light status updated
+deactivate model
+
+view --> tp : Display: "Lights is on"
+deactivate view
+
+tp --> muser : Confirming: "Lights in the living room are ON"
+
+@enduml
