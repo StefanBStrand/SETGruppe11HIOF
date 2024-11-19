@@ -213,7 +213,7 @@ class SmartBulb(SmartDevice):
         return "Failed to turn off the SmartBulb."
 
     def get_device_type(self):
-        return self.device_type
+        return "smartbulb"
 
     def get_brightness(self):
         return self.brightness
@@ -280,5 +280,5 @@ class SmartThermostat(SmartDevice):
         return self.mode
 
     def get_device_type(self):
-        return self.device_type
+        return "smartthermostat"
 
