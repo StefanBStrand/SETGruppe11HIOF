@@ -17,7 +17,7 @@
     <input type="range" id="temperatureSlider" min="10" max="30" value="{{ thermostat.set_temperature }}"
            oninput="updateSliderValue(this.value)">
 
-    <a href="{% url 'delete_device' thermostat.id %}" class="btn btn-primary">Slette enhet</a>
+    <a href="{% url 'delete_device' thermostat.device_type thermostat.id %}" class="btn btn-primary">Slette enhet</a>
 
     <script>
 
@@ -42,7 +42,7 @@
     });
     </script>
 
-    <br><br> <!--Styling is not a priority right now...-->
+    <br><br> <!--Styling is not a priority right now..:/.-->
     <a href="{% url 'home' %}">Back to Home</a>
 
 

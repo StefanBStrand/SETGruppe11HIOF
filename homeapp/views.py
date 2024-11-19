@@ -1,14 +1,11 @@
 from django.http import HttpResponse
 
 from .forms import SmartThermostatForm, SmartBulbForm, CarChargerForm
-# Create your views here.
 from .models import Home, Room, SmartDevice, CarCharger, SmartThermostat, SmartBulb
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
-
 from django.contrib.auth.decorators import login_required
-
 from .services import fetch_weather_data
 
 
@@ -73,9 +70,7 @@ def update_thermostat(request, id):
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
             return render(request, 'thermostat.html', {'thermostat': thermostat})
-
         return redirect('thermostat_detail', id=thermostat.id)
-
     return render(request, 'thermostat.html', {'thermostat': thermostat})
 
 @login_required
@@ -106,7 +101,6 @@ def update_device_view(request, device_type, id):
 @login_required
 def delete_smart_thermostat_device_view(request, id):
     smart_thermostat = get_object_or_404(SmartThermostat, id=id)
-
     if request.method == 'POST':
         smart_thermostat.delete()
         return redirect(reverse_lazy('home'))
@@ -131,7 +125,6 @@ def update_device_temperature(request, device_type, id):
 
     messages.error(request, "Invalid request method.")
     return redirect(reverse('device_detail', kwargs={'device_type': device_type, 'id': id}))
-
 
 
 @login_required
