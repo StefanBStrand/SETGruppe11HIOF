@@ -254,6 +254,7 @@ class SmartThermostat(SmartDevice):
         response = send_temperature_update_to_external_system(new_temperature)
         if response["response"] == "success":
             self.set_temperature = response["updated_temperature"]
+            self.temperature_in_room = new_temperature
             self.save()
             return f"Temperature updated to {self.set_temperature}°C."
         return "Failed to update temperature."
