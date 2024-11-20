@@ -10,68 +10,6 @@ from .models import SmartThermostat, CarCharger, SmartBulb
 from django.test import Client
 
 
-class SmartThermostatViewTest(unittest.TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.thermostat = SmartThermostat.objects.create(
-            temperature_in_room=20,
-            set_temperature=22,
-            humidity=45,
-            mode='off'
-        )
-
-    def tearDown(self):
-        SmartThermostat.objects.all().delete()
-        connection.close()
-
-    def test_update_thermostat_view_valid(self):
-        url = reverse('update_thermostat', args=[self.thermostat.id])
-        response = self.client.post(url, {'mode': 'cool'})
-
-        self.thermostat.refresh_from_db()
-
-        assert response.status_code == 302
-        assert response['Location'] == reverse('thermostat_detail', args=[self.thermostat.id])
-        assert self.thermostat.mode == 'cool'
-
-    def test_update_thermostat_view_invalid_mode(self):
-        url = reverse('update_thermostat', args=[self.thermostat.id])
-        response = self.client.post(url, {'mode': 'invalid_mode'})
-
-        self.thermostat.refresh_from_db()
-
-        assert response.status_code == 200
-        assert self.thermostat.mode != 'invalid_mode'
-        assert "Invalid mode selected." in response.content.decode()
-
-    def test_update_thermostat_view_non_existent(self):
-        non_existent_url = reverse('update_thermostat', args=[9999])
-        response = self.client.post(non_existent_url, {'mode': 'cool'})
-        assert response.status_code == 404
-
-    def test_update_thermostat_redirect(self):
-        url = reverse('update_thermostat', args=[self.thermostat.id])
-        response = self.client.post(url, {'mode': 'heat'})
-        assert response.status_code == 302
-        assert response['Location'] == reverse('thermostat_detail', args=[self.thermostat.id])
-
-
-    # Thermostat_detail tests: ******
-
-    def test_thermostat_detail_view_exists(self):
-        url = reverse('thermostat_detail', args=[self.thermostat.id])
-        response = self.client.get(url)
-
-        assert response.status_code == 200
-        assert 'thermostat_detail.html' in [t.name for t in response.templates]
-        assert str(self.thermostat.set_temperature) in response.content.decode()
-        assert self.thermostat.mode in response.content.decode()
-
-    def test_thermostat_detail_view_non_existent(self):
-        non_existent_url = reverse('thermostat_detail', args=[9999])
-        response = self.client.get(non_existent_url)
-
-        assert response.status_code == 404
 
 # Car charger stub tests
 
@@ -222,6 +160,7 @@ class SmartThermostatTest(TestCase):
     def setUp(self):
         self.thermostat = SmartThermostat.objects.create(
             temperature_in_room=20,
+            device_type = 'smartthermostat',
             set_temperature=22,
             humidity=45,
             mode='off'
@@ -248,3 +187,69 @@ class SmartThermostatTest(TestCase):
         result = self.thermostat.update_mode("cool")
         self.assertEqual(self.thermostat.mode, "cool")
         self.assertEqual(result, "Mode updated to cool.")
+
+
+#Views tests
+class SmartThermostatViewTest(unittest.TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.thermostat = SmartThermostat.objects.create(
+            temperature_in_room=20,
+            set_temperature=22,
+            humidity=45,
+            mode='off',
+            device_type = 'smartthermostat'
+        )
+
+    def tearDown(self):
+        SmartThermostat.objects.all().delete()
+        connection.close()
+
+    def test_update_thermostat_view_valid(self):
+        url = reverse('update_thermostat', args=[self.thermostat.id])
+        response = self.client.post(url, {'mode': 'cool'})
+
+        self.thermostat.refresh_from_db()
+
+        assert response.status_code == 302
+        assert response['Location'] == reverse('thermostat_detail', args=[self.thermostat.id])
+        assert self.thermostat.mode == 'cool'
+
+    def test_update_thermostat_view_invalid_mode(self):
+        url = reverse('update_thermostat', args=[self.thermostat.id])
+        response = self.client.post(url, {'mode': 'invalid_mode'})
+
+        self.thermostat.refresh_from_db()
+
+        assert response.status_code == 200
+        assert self.thermostat.mode != 'invalid_mode'
+        assert "Invalid mode selected." in response.content.decode()
+
+    def test_update_thermostat_view_non_existent(self):
+        non_existent_url = reverse('update_thermostat', args=[9999])
+        response = self.client.post(non_existent_url, {'mode': 'cool'})
+        assert response.status_code == 404
+
+    def test_update_thermostat_redirect(self):
+        url = reverse('update_thermostat', args=[self.thermostat.id])
+        response = self.client.post(url, {'mode': 'heat'})
+        assert response.status_code == 302
+        assert response['Location'] == reverse('thermostat_detail', args=[self.thermostat.id])
+
+
+    # Thermostat_detail tests: ******
+
+    def test_thermostat_detail_view_exists(self):
+        url = reverse('thermostat_detail', args=[self.thermostat.id])
+        response = self.client.get(url)
+
+        assert response.status_code == 200
+        assert 'thermostat_detail.html' in [t.name for t in response.templates]
+        assert str(self.thermostat.set_temperature) in response.content.decode()
+        assert self.thermostat.mode in response.content.decode()
+
+    def test_thermostat_detail_view_non_existent(self):
+        non_existent_url = reverse('thermostat_detail', args=[9999])
+        response = self.client.get(non_existent_url)
+
+        assert response.status_code == 404
