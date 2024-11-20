@@ -279,12 +279,68 @@ class ViewsTestings(TestCase):
             device_type="carcharger",
         )
 
-    def test_home_view_authenticated(self):
+
+
+    def test_home_view_logged_in(self):
         self.client.login(username="TestBrukern", password="TestPassord")
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Thermostat i Stue")
 
-    def test_home_view_unauthenticated(self):
+    def test_home_view_not_logged_in(self):
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 302)
+
+    def test_settings_by_user(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.get(reverse('settings'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'settings.html')
+
+    def test_device_detail(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.get(reverse('device_detail', args=['smartthermostat', self.thermostat.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'device_detail.html')
+        self.assertContains(response, "Thermostat i Stue")
+
+    def test_device_detail_prepare_for_fail(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.get(reverse('device_detail', args=['not_device', self.thermostat.id]))
+        self.assertEqual(response.status_code, 302)
+
+    def test_new_device_by_user(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.post(reverse('new_device', args=['smartbulb']), {
+            'name': 'Nyttlys',
+            'room': self.room.id,
+            'is_on': True,
+            'color': 'white',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(SmartBulb.objects.filter(name="Nyttlys").exists())
+
+    def test_delete_device_logged_in(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.post(reverse('delete_device', args=['smartbulb', self.smartbulb.id]))
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(SmartBulb.objects.filter(id=self.smartbulb.id).exists())
+
+
+    def test_toggle_light(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.post(reverse('toggle_light', args=['smartbulb', self.smartbulb.id]))
+        self.assertEqual(response.status_code, 302)
+        self.smartbulb.refresh_from_db()
+        self.assertTrue(self.smartbulb.is_on)
+
+
+def test_create_car_charger(self):
+    self.client.login(username="TestBrukern", password="TestPassord")
+    response = self.client.post(reverse('new_device', args=['carcharger']), {
+        'name': 'Billader',
+        'room': self.room.id,
+    })
+
+    self.assertEqual(response.status_code, 302)
+    self.assertTrue(CarCharger.objects.filter(name="Billader").exists())
