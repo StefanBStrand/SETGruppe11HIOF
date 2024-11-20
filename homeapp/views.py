@@ -44,7 +44,7 @@ def create_smart_thermostat_device_view(request):
         form = SmartThermostatForm(request.POST)
         if form.is_valid():
             smart_thermostat = form.save(commit=False)
-            smart_thermostat.owner = request.user  # Setter eieren til innlogget bruker
+            smart_thermostat.owner = request.user
             smart_thermostat.save()
             return redirect(reverse_lazy('home'))
     else:
@@ -169,6 +169,7 @@ def new_device(request, device_type):
         form = form_class(request.POST)
         if form.is_valid():
             device = form.save(commit=False)
+            device.device_type = device_type
             device.owner = request.user
             device.save()
             return redirect(reverse_lazy('home'))

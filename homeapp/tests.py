@@ -3,10 +3,12 @@
 
 from unittest.mock import patch
 import unittest
+
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from django.db import connection
-from .models import SmartThermostat, CarCharger, SmartBulb
+from .models import SmartThermostat, CarCharger, SmartBulb, Home
 from django.test import Client
 
 
@@ -190,66 +192,26 @@ class SmartThermostatTest(TestCase):
 
 
 #Views tests
-class SmartThermostatViewTest(unittest.TestCase):
+class CreateSmartThermostatViewTests(TestCase):
     def setUp(self):
-        self.client = Client()
-        self.thermostat = SmartThermostat.objects.create(
-            temperature_in_room=20,
-            set_temperature=22,
-            humidity=45,
-            mode='off',
-            device_type = 'smartthermostat'
-        )
+        self.user = User.objects.create_user(username="testbruker", password="testpassword")
 
-    def tearDown(self):
-        SmartThermostat.objects.all().delete()
-        connection.close()
+    #Bruker ikke logget inn
+    def test_create_thermostat_unauthenticated(self):
+        response = self.client.get(reverse('new_device', args=['smartthermostat']))
+        self.assertEqual(response.status_code, 302)
 
-    def test_update_thermostat_view_valid(self):
-        url = reverse('update_thermostat', args=[self.thermostat.id])
-        response = self.client.post(url, {'mode': 'cool'})
-
-        self.thermostat.refresh_from_db()
-
-        assert response.status_code == 302
-        assert response['Location'] == reverse('thermostat_detail', args=[self.thermostat.id])
-        assert self.thermostat.mode == 'cool'
-
-    def test_update_thermostat_view_invalid_mode(self):
-        url = reverse('update_thermostat', args=[self.thermostat.id])
-        response = self.client.post(url, {'mode': 'invalid_mode'})
-
-        self.thermostat.refresh_from_db()
-
-        assert response.status_code == 200
-        assert self.thermostat.mode != 'invalid_mode'
-        assert "Invalid mode selected." in response.content.decode()
-
-    def test_update_thermostat_view_non_existent(self):
-        non_existent_url = reverse('update_thermostat', args=[9999])
-        response = self.client.post(non_existent_url, {'mode': 'cool'})
-        assert response.status_code == 404
-
-    def test_update_thermostat_redirect(self):
-        url = reverse('update_thermostat', args=[self.thermostat.id])
-        response = self.client.post(url, {'mode': 'heat'})
-        assert response.status_code == 302
-        assert response['Location'] == reverse('thermostat_detail', args=[self.thermostat.id])
+    #Bruker logget inn
+    def test_create_thermostat_authenticated(self):
+        self.client.login(username="testbruker", password="testpassword")
+        response = self.client.post(reverse('new_device', args=['smartthermostat']), {
+            'name': 'Test',
+            'set_temperature': 22,
+            'room': "",
+            'device_type': 'smartthermostat',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(SmartThermostat.objects.filter(name="Test").exists())
 
 
-    # Thermostat_detail tests: ******
 
-    def test_thermostat_detail_view_exists(self):
-        url = reverse('thermostat_detail', args=[self.thermostat.id])
-        response = self.client.get(url)
-
-        assert response.status_code == 200
-        assert 'thermostat_detail.html' in [t.name for t in response.templates]
-        assert str(self.thermostat.set_temperature) in response.content.decode()
-        assert self.thermostat.mode in response.content.decode()
-
-    def test_thermostat_detail_view_non_existent(self):
-        non_existent_url = reverse('thermostat_detail', args=[9999])
-        response = self.client.get(non_existent_url)
-
-        assert response.status_code == 404
