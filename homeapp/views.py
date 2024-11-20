@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 
 from .forms import SmartThermostatForm, SmartBulbForm, CarChargerForm
 from .models import Home, Room, SmartDevice, CarCharger, SmartThermostat, SmartBulb
@@ -50,7 +49,7 @@ def create_smart_thermostat_device_view(request):
     else:
         form = SmartThermostatForm()
 
-    return render(request, 'create_device.html', {'form': form})
+    return render(request, 'new_device.html', {'form': form})
 
 def update_thermostat(request, id):
     thermostat = get_object_or_404(SmartThermostat, id=id)
@@ -97,6 +96,8 @@ def update_device_view(request, device_type, id):
         form = form_class(instance=device)
     return render(request, 'update_device.html', {'form': form, 'device_type': device_type})
 
+'''
+Disse er ikke i bruk.
 
 @login_required
 def delete_smart_thermostat_device_view(request, id):
@@ -104,12 +105,14 @@ def delete_smart_thermostat_device_view(request, id):
     if request.method == 'POST':
         smart_thermostat.delete()
         return redirect(reverse_lazy('home'))
-    return render(request, 'delete_device.html', {'smart_thermostat': smart_thermostat})
+    return render(request, 'create_device.html', {'smart_thermostat': smart_thermostat})
 
+#Brukes ikke
 def thermostat_detail(request, id):
     thermostat = get_object_or_404(SmartThermostat, id=id)
     return render(request, 'thermostat_detail.html', {'thermostat': thermostat})
 
+'''
 @login_required
 def update_device_temperature(request, device_type, id):
     if request.method == "POST":
