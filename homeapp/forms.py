@@ -5,12 +5,13 @@ from .models import SmartThermostat, SmartBulb, CarCharger
 class SmartThermostatForm(forms.ModelForm):
     class Meta:
         model = SmartThermostat
-        fields = ['name', 'set_temperature', 'room']
+        fields = ['name', 'set_temperature', 'room', 'mode']
 
         labels = {
             "name": "Visningsnavn på termostat",
             "room": "Rom enheten skal være i",
             "set_temperature": "Ønsket temperatur",
+            "mode": "Modus"
         }
 
 class SmartBulbForm(forms.ModelForm):
