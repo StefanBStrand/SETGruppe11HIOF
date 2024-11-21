@@ -1,50 +1,79 @@
-{% extends "base.html" %}
-
-{% block content %}
-
-
-<p>Hei, {{ user.first_name }}</p>
-<p>Velkommen til ditt hjem!</p>
-<p>For å endre ditt hjem eller legge til rom - trykk på tannhjulet!</p>
-
-<section class="device-grid">
-
-{% for room in rooms %}
-    <div class="room-container">
-    <h2><b>{{ room.name }}</b></h2>
-{% for charger in chargers %}
-        {% if charger.room == room %}
-        <button class="device-button"><a href="{% url 'device_detail' charger.get_device_type charger.id %}">{{ charger.name }}</a></button>
-        {% endif %}
-    {% endfor %}
-
-
-    {% for thermostat in thermostats %}
-        {% if thermostat.room == room %}
-        <button class="device-button"><a href="{% url 'device_detail' thermostat.get_device_type thermostat.id %}">{{ thermostat.name }}</a></button>
-        {% endif %}
-    {% endfor %}
-
-            {% for smartbulb in smartbulbs %}
-        {% if smartbulb.room == room %}
-        <button class="device-button"><a href="{% url 'device_detail' smartbulb.get_device_type smartbulb.id %}">{{ smartbulb.name }}</a></button>
-        {% endif %}
-    {% endfor %}
-
-
-
-        </div>
-{% endfor %}
-
-   </section>
-
-    <div class="circle">
-            <h2>Utetemperatur</h2>
-            <p>{{ air_temperature }} °C</p>
-            <p>{{ home.city }} </p>
+{% load static %}
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyHome</title>
+    <link id="theme-style" rel="stylesheet" href="{% static 'css/dark-mode.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <script src="{% static 'js/toggle_theme.js' %}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EasyHome</h1>
+        </header>
+    
+    <div class="home-header">
+        <h2>Ditt Hjem</h2>
+        <button class="icon-button">⚙️</button>
     </div>
 
+        <div class="status-grid">
+            <div class="circle">
+                <h2>Strømforbruk</h2>
+                <p>80 kWh</p>
+            </div>
+            <div class="middle-section">
+                <p>Her kommer oversikt over dine rom og smartenheter</p>
+                <section class="device-grid">
+            {% for room in rooms %}
+                <div class="room-container">
+                    <h2><b>{{ room.name }}</b></h2>
+                    {% for charger in chargers %}
+                        {% if charger.room == room %}
+                            <button class="device-button">
+                                <a href="{% url 'device_detail' charger.get_device_type charger.id %}">
+                                    {{ charger.name }}
+                                </a>
+                            </button>
+                        {% endif %}
+                    {% endfor %}
 
+                    {% for thermostat in thermostats %}
+                        {% if thermostat.room == room %}
+                            <button class="device-button">
+                                <a href="{% url 'device_detail' thermostat.get_device_type thermostat.id %}">
+                                    {{ thermostat.name }}
+                                </a>
+                            </button>
+                        {% endif %}
+                    {% endfor %}
 
+                    {% for smartbulb in smartbulbs %}
+                        {% if smartbulb.room == room %}
+                            <button class="device-button">
+                                <a href="{% url 'device_detail' smartbulb.get_device_type smartbulb.id %}">
+                                    {{ smartbulb.name }}
+                                </a>
+                            </button>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </section>
+          </div>
+         <div class="circle">
+             <h2>Utetemp</h2>
+             <p>12°C</p>
+            </div>
+        </div>
 
-{% endblock content %}
+        <footer>
+            <button class="add-device"><a href="{% url 'new_device_list'  %}">Legg til enhet +</a></button>
+        </footer>
+    </div>
+</body>
+
+</html>

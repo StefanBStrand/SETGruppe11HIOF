@@ -1,0 +1,54 @@
+/* Sentraliser login-siden */
+body {
+    display: flex;
+    flex-direction: column; /* Plasser elementer i en kolonne */
+    justify-content: flex-start; /* Start plassert høyere */
+    align-items: center; /* Sentrer horisontalt */
+    min-height: 100vh; /* Bruk full skjermhøyde */
+    margin: 0; /* Fjern standard margin */
+    padding-top: 50px; /* Juster avstand fra toppen */
+}
+
+
+/* Logo-styling */
+.logo {
+    max-width: 350px; /* Øk bredden på logoen */
+    height: auto; /* Behold proporsjonene */
+    margin-bottom: -60px;
+}
+
+/* Styling for login-container */
+.login-container {
+    width: 100%;
+    max-width: 350px;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+/* Tilpass input-feltene */
+.login-container input {
+    width: 85%; /* Mindre bredde */
+    padding: 8px; /* Redusert høyde */
+    margin: 10px 0;
+    border-radius: 15px; /* Rundere kanter */
+    text-align: center;
+    font-size: 14px; /* Juster fontstørrelsen */
+}
+
+/* Tilpass knappene */
+.login-container button {
+    width: 65%; /* Gjør knappene smalere */
+    padding: 8px; /* Mindre høyde */
+    margin: 8px auto; /* Sentraliser knappene */
+    border-radius: 15px; /* Runde kanter */
+    font-size: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Myk skygge */
+    border: none;
+    font-weight: bold;
+}
+
+/* Knappene hover-effekt */
+.login-container button:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Mykere hover-effekt */
+}

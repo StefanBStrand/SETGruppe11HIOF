@@ -18,36 +18,7 @@
         <button id="home-btn" class="icon-button"><a href="{% url 'home' %}">🏠</a></button>
         <button id="settings-btn" class="icon-button"><a href="{% url 'settings' %}">⚙️</a></button>
     </nav>
-        <script>
-
-    setTimeout(function() {
-        const messages = document.getElementById('messages');
-        if (messages) {
-            messages.style.display = 'none';
-        }
-    }, 3000);
-
-    const body = document.body;
-
-
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-    body.classList.add(savedTheme);
-}
-
-
-function toggleTheme() {
-    if (body.classList.contains('dark-mode')) {
-        body.classList.remove('dark-mode');
-        localStorage.setItem('theme', '');
-    } else {
-        body.classList.add('dark-mode');
-        localStorage.setItem('theme', 'dark-mode');
-    }
-}
-</script>
-
-
+    
 {% if messages %}
     <ul id="messages" class="messages">
         {% for message in messages %}
@@ -63,8 +34,6 @@ function toggleTheme() {
             <footer>
 
         <button class="add-device"><a href="{% url 'new_device_list'  %}">Legg til enhet +</a></button>
-                <button onclick="toggleTheme()">Dark / Light</button>
-        <button class="devices-settings">Enheter ⚙️</button>
     </footer>
 </div>
 </body>

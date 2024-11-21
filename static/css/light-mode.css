@@ -1,0 +1,27 @@
+body {
+    background-color: #fff; /* Felles lys bakgrunn */
+    color: #000; /* Felles svart tekst */
+}
+
+button {
+    background-color: #e0e0e0; /* Lys grå farge */
+    color: #000; /* Svart tekst */
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #d6d6d6; /* Mørkere grå ved hover */
+}
+
+
+input {
+    background-color: #f0f0f0; /* Felles lys grå for input-felt */
+    color: #000; /* Svart tekst i input-felt */
+    border: 1px solid #ccc; /* Lys kant */
+}
+
+.container {
+    background-color: #f9f9f9; /* Felles lys grå for containere */
+    color: #000; /* Svart tekst i containere */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Myk skygge */
+}
