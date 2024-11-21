@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from .services import *
 
@@ -226,8 +227,8 @@ class SmartBulb(SmartDevice):
 
 
 class SmartThermostat(SmartDevice):
-    temperature_in_room = models.IntegerField(blank=True, null=True, default=22)
-    set_temperature = models.IntegerField(default=22)  # TODO Change field to current_temperature.
+    temperature_in_room = models.IntegerField(blank=True, null=True, default=22, validators=[MinValueValidator(5), MaxValueValidator(30)])
+    set_temperature = models.IntegerField(default=22, validators=[MinValueValidator(5), MaxValueValidator(30)])
     humidity = models.IntegerField(blank=True, null=True, default=45)
     device_type = 'smartthermostat'
 
@@ -250,14 +251,21 @@ class SmartThermostat(SmartDevice):
         return data
 
     def update_temperature(self, new_temperature):
-
+        if new_temperature < 5 or new_temperature > 30:
+            return "Temperatur må være mellom 5 og 30 grader."
         response = send_temperature_update_to_external_system(new_temperature)
         if response["response"] == "success":
             self.set_temperature = response["updated_temperature"]
-            self.temperature_in_room = new_temperature
+            #self.temperature_in_room = new_temperature (Kommentert ut: Var før satt til temp med en gang.)
             self.save()
-            return f"Temperature updated to {self.set_temperature}°C."
-        return "Failed to update temperature."
+            if self.set_temperature > self.temperature_in_room:
+                self.update_mode('heat')
+            elif self.set_temperature < self.temperature_in_room:
+                self.update_mode('cool')
+            else:
+                self.update_mode('off')
+            return f"Temperatur oppdatert til {self.set_temperature}°C."
+        return "Feil ved oppdatering i av temperatur."
 
     def update_mode(self, new_mode):
 
@@ -265,8 +273,8 @@ class SmartThermostat(SmartDevice):
         if response["response"] == "success":
             self.mode = response["updated_mode"]
             self.save()
-            return f"Mode updated to {self.mode}."
-        return "Failed to update mode."
+            return f"Modus oppdatert til {self.mode}."
+        return "Feil ved oppdatering av modus."
 
     def get_temperature(self):
         return self.temperature_in_room

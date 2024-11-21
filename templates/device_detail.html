@@ -7,13 +7,14 @@
 
     <p>Rom: {{device.room}}</p>
     {% if device.get_device_type == 'smartthermostat' %}
-    <p>Temperatur: {{ device.get_temperature }} C&deg;</p>
+    <p>Temperatur i rommet: {{ device.get_temperature }} C&deg;</p>
+<p>Satt temperatur på termostat: {{ device.get_set_temperature }} </p>
 <p>Tilstand: {{ device.get_mode }}</p>
 <p>Relativ luftfuktighet: {{ device.get_humidity }}</p>
 <form method="post" action="{% url 'update_device_temperature' device_type=device.get_device_type id=device.id %}">
     {% csrf_token %}
     <label for="temperature">Sett ny temperatur:</label>
-    <input type="number" id="temperature" name="temperature" value="{{ device.get_temperature }}">
+    <input type="number" id="temperature" name="temperature" value="{{ device.get_set_temperature }}">
     <button type="submit">Oppdater temperatur</button>
 </form>
     {% endif %}

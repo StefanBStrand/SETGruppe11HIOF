@@ -65,7 +65,7 @@ def update_thermostat(request, id):
         try:
             thermostat.mode = mode
             thermostat.save()
-            messages.success(request, "Thermostat updated successfully.")
+            messages.success(request, "Termostat oppdatert!.")
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
             return render(request, 'thermostat.html', {'thermostat': thermostat})
@@ -91,7 +91,7 @@ def update_device_view(request, device_type, id):
         form = form_class(request.POST, instance=device)
         if form.is_valid():
             form.save()
-            return redirect(reverse_lazy('home'))
+            return redirect('device_detail', device_type=device_type, id=id)
     else:
         form = form_class(instance=device)
     return render(request, 'update_device.html', {'form': form, 'device_type': device_type})
@@ -127,7 +127,9 @@ def update_device_temperature(request, device_type, id):
         return redirect('device_detail', device_type=device_type, id=id)
 
     messages.error(request, "Invalid request method.")
-    return redirect(reverse('device_detail', kwargs={'device_type': device_type, 'id': id}))
+    return redirect('device_detail', device_type=device_type, id=id)
+    #return redirect(reverse('device_detail', kwargs={'device_type': device_type, 'id': id}))
+
 
 
 @login_required
