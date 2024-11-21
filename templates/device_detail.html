@@ -28,15 +28,11 @@
     
     
     <div class="each-device-container">
-        <section class="room-section">
             <p>Rom: {{device.room}}</p>
-        </section>
     {% if device.get_device_type == 'smartthermostat' %}
-        <section class="get-status">
             <p>Temperatur: {{ device.get_temperature }} C&deg;</p>
             <p>Tilstand: {{ device.get_mode }}</p>
             <p>Relativ luftfuktighet: {{ device.get_humidity }}</p>
-        </section>
         <form method="post" action="{% url 'update_device_temperature' device_type=device.get_device_type id=device.id %}">
             {% csrf_token %}
             <label for="temperature">Sett ny temperatur:</label>
@@ -46,11 +42,9 @@
             {% endif %}
 
     {% if device.get_device_type == 'smartbulb' %}
-        <section class="get-status">
             <p>Farge: {{ device.get_color }}</p>
             <p>Tilstand: {% if device.get_is_on_status == False %}Lys er av{% else %}Lys er på{% endif %}</p>
             <p>Styrke: {{ device.get_brightness}}</p>
-        </section>
         <form method="post" action="{% url 'toggle_light' device_type=device.get_device_type id=device.id %}">
                 {% csrf_token %}
                 <button type="submit">
@@ -65,11 +59,10 @@
         {% endif %}
 
         {% if device.get_device_type == 'carcharger' %}
-            <section class="get-status">
-                <p>Batteri: {{ get_battery_charge }} kW</p>
-                <p>Batterikapasitet: {{ device.get_battery_capacity }} kW</p>
-                <p>Ladestatus: {{ device.get_is_charging_status }}</p>
-                <p>Strømstyrke: {{ device.get_current_power_consumption }} A</p>
+            <p>Batteri: {{ get_battery_charge }} kW</p>
+            <p>Batterikapasitet: {{ device.get_battery_capacity }} kW</p>
+            <p>Ladestatus: {{ device.get_is_charging_status }}</p>
+            <p>Strømstyrke: {{ device.get_current_power_consumption }} A</p>
             </section>
         {% endif %}
     </div>
