@@ -1,16 +1,44 @@
-{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyHome</title>
+    <link id="theme-style" rel="stylesheet" href="{% static 'css/dark-mode.css' %}">
+    <link rel="stylesheet" href="{% static 'css/new_device_list.css' %}">
+    <script src="{% static 'js/toggle_theme.js' %}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EasyHome</h1>
+        </header>
+    
+    <div class="home-header">
+        <section class="header-container">
+            <h2>Legg til ny enhet</h2>
+        </section>
+        <button class="icon-button"><span class="icon">⚙️</span></button>
+    </div>
 
-{% block content %}
-<h1>Legg til ny enhet!</h1>
-<h2>Velg type enhent du ønsker å legge til i ditt smarthjem:</h2>
+    <div class="middle-section-container">
+        <h2>Velg type enhet:</h2>
+    </div>
+        
+    <div class="new_devices">   
+        <button class="add-carcharger"><a href="{% url 'new_device' 'carcharger' %}" class="device-button">
+        Elbillader</a></button>
+        <button class="add-smartthermo"><a href="{% url 'new_device' 'smartthermostat' %}" class="device-button">
+        Termostat / termometer</a></button>
+        <button class="add-smartbulb"><a href="{% url 'new_device' 'smartbulb' %}" class="device-button">
+        Smartpære</a></button>
+    </div>
 
-
-<a href="{% url 'new_device' 'carcharger' %}" class="device-button">Elbillader</a>
-<a href="{% url 'new_device' 'smartthermostat' %}" class="device-button">Termostat / termometer</a>
-<a href="{% url 'new_device' 'smartbulb' %}" class="device-button">Smartpære</a>
-
-
-<p>Mye nytt? Ikke vær redd. Vi guider deg gjennom prosessen!</p>
-<p>Er det noe du savner? Gi oss beskjed!</p>
-
-{% endblock content %}
+    <footer>
+        <p>Mye nytt? Ikke vær redd. Vi guider deg gjennom prosessen!</p>
+        <p>Er det noe du savner? Gi oss beskjed!</p>
+   </footer> 
+ </div>
+</body>
+</html>
