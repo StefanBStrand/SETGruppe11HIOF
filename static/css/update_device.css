@@ -74,3 +74,10 @@ header h1 {
     gap: 10px;
     margin-top: 20px;
 }
+
+.form-styling form{
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
