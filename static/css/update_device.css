@@ -1,7 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #ffffff;
     margin: 0;
     padding: 0;
     display: flex;
@@ -39,8 +37,6 @@ header h1 {
 }
 
 .icon-button {
-    background-color: #505050;
-    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -59,7 +55,6 @@ header h1 {
 .header-container {
     position: relative;
     left: 30px;
-    background-color: #333;
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);

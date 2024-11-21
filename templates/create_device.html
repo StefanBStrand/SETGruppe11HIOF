@@ -1,7 +1,29 @@
-{% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyHome</title>
+    <link id="theme-style" rel="stylesheet" href="{% static 'css/dark-mode.css' %}">
+    <link rel="stylesheet" href="{% static 'css/create_device.css' %}">
+    <script src="{% static 'js/toggle_theme.js' %}" defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>EasyHome</h1>
+        </header>
+    
+    <div class="home-header">
+        <section class="header-container">
+            <h2>Oppdater enhet</h2>
+        </section>
+        <button class="icon-button"><span class="icon">⚙️</span></button>
+    </div>
 
 Ny enhet
 <form action="" method="post">{% csrf_token %}
@@ -10,4 +32,6 @@ Ny enhet
 
 </form>
 
-{% endblock content %}
+    </div>
+</body>
+</html>

@@ -4,9 +4,13 @@ body {
 }
 
 button {
-    background-color: #e0e0e0; /* Lys grå farge */
+    background-color: #ccc; /* Lys grå farge */
     color: #000; /* Svart tekst */
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+button a{
+    color: black;
 }
 
 button:hover {
@@ -25,3 +29,77 @@ input {
     color: #000; /* Svart tekst i containere */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Myk skygge */
 }
+
+/* Light mode homescreen */
+
+.icon-button {
+   background-color: #707070;
+    color: black;
+}
+
+.icon-button:hover {
+    background-color: #707070;
+}
+
+.header-container {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+
+div.room-container {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+device-button {
+    background-color: #505050;
+}
+
+device-button a {
+    color: black;
+}
+
+.circle {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.icon-button {
+    color: #ffffff;
+}
+
+.add-device, .devices-settings {
+    background-color: #e0e0e0;
+    color: black;
+}
+
+footer .add-device a {
+    color: black;
+}
+
+.add-device:hover, .devices-settings:hover {
+    background-color: #e0e0e0;
+}
+
+/* Light mode Settings */
+
+/* Light mode Update_device */
+
+/* Light mode new_device list */
+.middle-section-container button {
+    background-color: #ccc;
+    color: #000000;
+}
+
+.middle-section-container button a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.middle-section-container button:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Light mode Device_detail */

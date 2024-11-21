@@ -28,3 +28,71 @@ input {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Dyp skygge */
 
 }
+
+/* Dark mode homescreen */
+
+.icon-button {
+   background-color: #505050;
+    color: white;
+}
+
+.icon-button:hover {
+    background-color: #707070;
+}
+
+.header-container {
+    background-color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.room-container {
+    background-color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.device-button {
+    background-color: #505050;
+    color: #fff;
+}
+
+.device-button a {
+    background-color: #707070;
+}
+
+.circle {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.icon-button {
+    color: #ffffff;
+}
+
+.add-device, .devices-settings {
+    background-color: #505050;
+    color: white;
+}
+
+footer .add-device a {
+    color: white;
+}
+
+.add-device:hover, .devices-settings:hover {
+    background-color: #707070;
+}
+
+/* Dark mode Settings */
+
+
+/* Dark mode Update_device */
+
+/* Dark mode new_device list */
+.middle-section-container button {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode Device_detail */
+
+
