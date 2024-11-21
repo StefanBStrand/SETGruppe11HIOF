@@ -1,23 +1,23 @@
-/* Sentraliser login-siden */
+
 body {
     display: flex;
-    flex-direction: column; /* Plasser elementer i en kolonne */
-    justify-content: flex-start; /* Start plassert høyere */
-    align-items: center; /* Sentrer horisontalt */
-    min-height: 100vh; /* Bruk full skjermhøyde */
-    margin: 0; /* Fjern standard margin */
-    padding-top: 50px; /* Juster avstand fra toppen */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 50px;
 }
 
 
-/* Logo-styling */
+
 .logo {
-    max-width: 350px; /* Øk bredden på logoen */
-    height: auto; /* Behold proporsjonene */
+    max-width: 350px;
+    height: auto;
     margin-bottom: -60px;
 }
 
-/* Styling for login-container */
+
 .login-container {
     width: 100%;
     max-width: 350px;
@@ -26,29 +26,28 @@ body {
     text-align: center;
 }
 
-/* Tilpass input-feltene */
 .login-container input {
-    width: 85%; /* Mindre bredde */
-    padding: 8px; /* Redusert høyde */
+    width: 85%;
+    padding: 8px;
     margin: 10px 0;
-    border-radius: 15px; /* Rundere kanter */
+    border-radius: 15px;
     text-align: center;
-    font-size: 14px; /* Juster fontstørrelsen */
+    font-size: 14px;
 }
 
 /* Tilpass knappene */
 .login-container button {
-    width: 65%; /* Gjør knappene smalere */
-    padding: 8px; /* Mindre høyde */
-    margin: 8px auto; /* Sentraliser knappene */
-    border-radius: 15px; /* Runde kanter */
+    width: 65%;
+    padding: 8px;
+    margin: 8px auto;
+    border-radius: 15px;
     font-size: 14px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Myk skygge */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     border: none;
     font-weight: bold;
 }
 
-/* Knappene hover-effekt */
+
 .login-container button:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Mykere hover-effekt */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
