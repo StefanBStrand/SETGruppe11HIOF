@@ -183,12 +183,12 @@ class SmartThermostatTest(TestCase):
     def test_update_temperature(self):
         result = self.thermostat.update_temperature(24)
         self.assertEqual(self.thermostat.set_temperature, 24)
-        self.assertEqual(result, "Temperature updated to 24°C.")
+        self.assertEqual(result, "Temperatur oppdatert til 24°C.")
 
     def test_update_mode(self):
         result = self.thermostat.update_mode("cool")
         self.assertEqual(self.thermostat.mode, "cool")
-        self.assertEqual(result, "Mode updated to cool.")
+        self.assertEqual(result, "Modus oppdatert til cool.")
 
 
 #Views tests
@@ -282,22 +282,43 @@ class ViewsTestings(TestCase):
         self.assertTrue(self.smartbulb.is_on)
 
 
-def test_create_car_charger(self):
-    self.client.login(username="TestBrukern", password="TestPassord")
-    response = self.client.post(reverse('new_device', args=['carcharger']), {
-        'name': 'Billader',
-        'room': self.room.id,
-    })
+    def test_create_car_charger(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.post(reverse('new_device', args=['carcharger']), {
+            'name': 'Billader',
+            'room': self.room.id,
+        })
 
-    self.assertEqual(response.status_code, 302)
-    self.assertTrue(CarCharger.objects.filter(name="Billader").exists())
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(CarCharger.objects.filter(name="Billader").exists())
 
 
-def test_update_device_temperature(self):
-    self.client.login(username="TestBrukern", password="TestPassord")
-    response = self.client.post(reverse('update_device_temperature', args=['smartthermostat', self.thermostat.id]), {
-        'temperature': 24,
-    })
-    self.assertEqual(response.status_code, 302)
-    self.thermostat.refresh_from_db()
-    self.assertEqual(self.thermostat.set_temperature, 24)
+    def test_update_device_temperature(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat', self.thermostat.id]), {
+            'temperature': 24,
+        })
+        self.assertEqual(response.status_code, 302)
+        self.thermostat.refresh_from_db()
+        self.assertEqual(self.thermostat.set_temperature, 24)
+
+    def test_update_device_temperature_with_mode_heat(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat', self.thermostat.id]), {
+            'temperature': 24,
+        })
+        self.assertEqual(response.status_code, 302)
+        self.thermostat.refresh_from_db()
+        self.assertEqual(self.thermostat.set_temperature, 24)
+        self.assertEqual(self.thermostat.mode, 'heat')
+
+    def test_update_device_temperature_with_mode_cool(self):
+        self.client.login(username="TestBrukern", password="TestPassord")
+        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat', self.thermostat.id]),
+                                    {
+                                        'temperature': 20,
+                                    })
+        self.assertEqual(response.status_code, 302)
+        self.thermostat.refresh_from_db()
+        self.assertEqual(self.thermostat.set_temperature, 20)
+        self.assertEqual(self.thermostat.mode, 'cool')
