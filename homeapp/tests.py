@@ -37,7 +37,6 @@ class CarChargerUnitTests(TestCase):
         self.assertFalse(self.car_charger.is_charging)
 
     def test_start_charging_with_zero_power_rate(self):
-        # Simulate connection to car
         self.car_charger.is_connected_to_car = True
         self.car_charger.save()
 
@@ -295,18 +294,16 @@ class ViewsTestings(TestCase):
 
     def test_update_device_temperature(self):
         self.client.login(username="TestBrukern", password="TestPassord")
-        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat', self.thermostat.id]), {
-            'temperature': 24,
-        })
+        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat',
+        self.thermostat.id]), {'temperature': 24,})
         self.assertEqual(response.status_code, 302)
         self.thermostat.refresh_from_db()
         self.assertEqual(self.thermostat.set_temperature, 24)
 
     def test_update_device_temperature_with_mode_heat(self):
         self.client.login(username="TestBrukern", password="TestPassord")
-        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat', self.thermostat.id]), {
-            'temperature': 24,
-        })
+        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat',
+        self.thermostat.id]), {'temperature': 24,})
         self.assertEqual(response.status_code, 302)
         self.thermostat.refresh_from_db()
         self.assertEqual(self.thermostat.set_temperature, 24)
@@ -314,10 +311,8 @@ class ViewsTestings(TestCase):
 
     def test_update_device_temperature_with_mode_cool(self):
         self.client.login(username="TestBrukern", password="TestPassord")
-        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat', self.thermostat.id]),
-                                    {
-                                        'temperature': 20,
-                                    })
+        response = self.client.post(reverse('update_device_temperature', args=['smartthermostat',
+        self.thermostat.id]), {'temperature': 20,})
         self.assertEqual(response.status_code, 302)
         self.thermostat.refresh_from_db()
         self.assertEqual(self.thermostat.set_temperature, 20)

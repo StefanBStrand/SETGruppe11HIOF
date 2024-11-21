@@ -126,7 +126,6 @@ class CarCharger(SmartDevice):
         return "Estimated charging time: {:.2f} minutes.".format(charging_time_minutes_to_full)
 
 
-
     def get_device_type(self):
         return "carcharger"
 
@@ -227,7 +226,8 @@ class SmartBulb(SmartDevice):
 
 
 class SmartThermostat(SmartDevice):
-    temperature_in_room = models.IntegerField(blank=True, null=True, default=22, validators=[MinValueValidator(5), MaxValueValidator(30)])
+    temperature_in_room = models.IntegerField(blank=True, null=True, default=22, validators=[MinValueValidator(5),
+        MaxValueValidator(30)])
     set_temperature = models.IntegerField(default=22, validators=[MinValueValidator(5), MaxValueValidator(30)])
     humidity = models.IntegerField(blank=True, null=True, default=45)
     device_type = 'smartthermostat'
