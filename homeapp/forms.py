@@ -18,13 +18,14 @@ class SmartThermostatForm(forms.ModelForm):
 class SmartBulbForm(forms.ModelForm):
     class Meta:
         model = SmartBulb
-        fields = ['is_on','name', 'color', 'room', 'color']
+        fields = ['is_on','name', 'color', 'room', 'color', 'brightness']
 
         labels = {
             "name": "Visningsnavn på smartpære",
             "room": "Rom enheten skal være i",
             "is_on": "Pære på",
-            "farge": "Farge"
+            "farge": "Farge",
+            "brightness": "Lysstyrke"
         }
 
 class CarChargerForm(forms.ModelForm):

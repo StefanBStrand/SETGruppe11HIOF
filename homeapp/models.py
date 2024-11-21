@@ -27,8 +27,8 @@ class Home(models.Model):
         lat = 59.84
         lon = 10.58
 
-    def str(self):
-        return f"{self.name}"
+    def __str__(self):
+        return self.name
 
 
 class Room(models.Model):
@@ -87,6 +87,7 @@ class CarCharger(SmartDevice):
         if response["response"] == "success":
             self.power_consumption = power_rate
             self.is_charging = True
+            self.is_connected_to_car = True
             self.save()
             return f"Charging started at {power_rate} kW."
         return "Failed to start charging."

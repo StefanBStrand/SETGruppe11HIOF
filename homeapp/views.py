@@ -128,7 +128,6 @@ def update_device_temperature(request, device_type, id):
 
     messages.error(request, "Invalid request method.")
     return redirect('device_detail', device_type=device_type, id=id)
-    #return redirect(reverse('device_detail', kwargs={'device_type': device_type, 'id': id}))
 
 
 
@@ -218,5 +217,25 @@ def toggle_light(request, device_type, id):
             messages.success(request, response_message)
     except Exception as e:
         messages.error(request, f"Failed to toggle light: {e}")
+
+    return redirect('device_detail', device_type=device_type, id=id)
+
+@login_required
+def toggle_charger(request, device_type, id):
+
+    if device_type != "carcharger":
+        return redirect('device_detail', device_type=device_type, id=id)
+
+    charger = get_object_or_404(CarCharger, id=id)
+
+    try:
+        if charger.is_on and charger.is_connected_to_car and charger.is_charging:
+            response_message = charger.stop_charging(10)
+            messages.success(request, response_message)
+        else:
+            response_message = charger.start_charging(charger.car_battery_charge)
+            messages.success(request, response_message)
+    except Exception as e:
+        messages.error(request, f"Feil ved lading: {e}")
 
     return redirect('device_detail', device_type=device_type, id=id)
