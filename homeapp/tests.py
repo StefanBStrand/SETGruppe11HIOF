@@ -262,9 +262,10 @@ class ViewsTestings(TestCase):
             'room': self.room.id,
             'is_on': True,
             'color': 'white',
+            'brightness': 100,
         })
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(SmartBulb.objects.filter(name="Nyttlys").exists())
+        self.assertTrue(SmartBulb.objects.filter(name='Nyttlys').exists())
 
     def test_delete_device_logged_in(self):
         self.client.login(username="TestBrukern", password="TestPassord")
