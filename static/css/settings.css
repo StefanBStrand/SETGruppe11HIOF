@@ -61,8 +61,13 @@ header h1 {
     right: 300px;
 }
 
-.icon-button:hover {
-    background-color: #707070;
+
+.icon-button a {
+    text-decoration: none;
+}
+
+.icon-button2 a {
+    text-decoration: none;
 }
 
 .header-container {

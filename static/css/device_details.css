@@ -65,6 +65,14 @@ header h1 {
     background-color: #707070;
 }
 
+.icon-button a {
+    text-decoration: none;
+}
+
+.icon-button2 a {
+    text-decoration: none;
+}
+
 .each-device-container{
     border-radius: 15px;
     background-color: #e0e0e0;

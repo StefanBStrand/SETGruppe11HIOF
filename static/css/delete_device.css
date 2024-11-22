@@ -63,6 +63,14 @@ header h1 {
     /*background-color: #707070;*/
 }
 
+.icon-button a {
+    text-decoration: none;
+}
+
+.icon-button2 a {
+    text-decoration: none;
+}
+
 .header-container {
     position: relative;
     left: 30px;

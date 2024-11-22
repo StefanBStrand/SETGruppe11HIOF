@@ -1,7 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    /*background-color: #1a1a1a;*/
-    /*color: #ffffff;*/
     margin: 0;
     padding: 0;
     display: flex;
@@ -26,10 +24,10 @@ header h1 {
 
 .home-header {
     display: flex;
-    align-items: center; /* Juster innhold vertikalt */
-    justify-content: center; /* Sentrer horisontalt */
-    gap: 10px; /* Avstand mellom headeren og knappen */
-    margin-top: 20px; /* Juster margin etter behov */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
     position: relative;
     left: 20px;
 }
@@ -41,8 +39,6 @@ header h1 {
 }
 
 .icon-button {
-    /*background-color: #505050;*/
-    /*color: white;*/
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -52,8 +48,6 @@ header h1 {
 }
 
 .icon-button2 {
-    /*background-color: #505050;*/
-    /*color: white;*/
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -66,17 +60,20 @@ header h1 {
     font-size: 1.5rem;
 }
 
-.icon-button:hover {
-    /*background-color: #707070;*/
+
+.icon-button a {
+    text-decoration: none;
+}
+
+.icon-button2 a {
+    text-decoration: none;
 }
 
 .header-container {
     position: relative;
     left: 30px;
-    /*background-color: #333;*/
     padding: 20px;
     border-radius: 15px;
-    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);*/
     text-align: center;
     margin-bottom: 5px;
 }
