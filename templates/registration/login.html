@@ -1,18 +1,26 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link id="theme-style" rel="stylesheet" href="{% static 'css/dark-mode.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <script src="{% static 'js/toggle_theme.js' %}" defer></script>
 </head>
 <body>
-    <h1>Login</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+    <div class="login-container">
+        <img id="logo" src="/static/images/easyhome_logo_dark.png" alt="Logo" class="logo">
+        
+        <h1>Logg inn</h1>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Brukernavn" required>
+            <input type="password" name="password" placeholder="Passord" required>
+            <button type="submit" class="login-btn">Logg inn</button>
+        </form>
+        <button id="login-theme-toggle" class="theme-toggle">Light mode</button>
+    </div>
 </body>
 </html>
-
-

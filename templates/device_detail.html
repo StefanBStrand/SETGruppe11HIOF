@@ -1,63 +1,97 @@
-{% extends "base.html" %}
-
-{% block content %}
-<h1>{{device.name}}</h1>
-
-{{device.description}}
-
-    <p>Rom: {{device.room}}</p>
-    {% if device.get_device_type == 'smartthermostat' %}
-    <p>Temperatur i rommet: {{ device.get_temperature }} C&deg;</p>
-<p>Satt temperatur på termostat: {{ device.get_set_temperature }} C&deg; </p>
-<p>Tilstand: {{ device.get_mode }}</p>
-<p>Relativ luftfuktighet: {{ device.get_humidity }}</p>
-<form method="post" action="{% url 'update_device_temperature' device_type=device.get_device_type id=device.id %}">
-    {% csrf_token %}
-    <label for="temperature">Sett ny temperatur:</label>
-    <input type="number" id="temperature" name="temperature" value="{{ device.get_set_temperature }}">
-    <button type="submit">Oppdater temperatur</button>
-</form>
-    {% endif %}
-
-    {% if device.get_device_type == 'smartbulb' %}
-    <p>Farge: {{ device.get_color }}</p>
-<p>Tilstand: {% if device.get_is_on_status == False %}Lys er av{% else %}Lys er på{% endif %}</p>
-<p>Styrke: {{ device.get_brightness}}</p>
-    <form method="post" action="{% url 'toggle_light' device_type=device.get_device_type id=device.id %}">
-        {% csrf_token %}
-        <button type="submit">
-            {% if device.is_on %}
-                Slå av lyset
-            {% else %}
-                Slå på lyset
-            {% endif %}
-        </button>
-    </form>
-
-    {% endif %}
-
-    {% if device.get_device_type == 'carcharger' %}
-    <p>Batteri: {{ device.get_battery_charge }} kW</p>
-<p>Batterikapasitet: {{ device.get_battery_capacity }} kW</p>
-<p>Ladestatus: {{ device.get_is_charging_status }}</p>
-<p>Strømstyrke: {{ device.get_current_power_consumption }} A</p>
-<form method="post" action="{% url 'toggle_charger' device_type=device.get_device_type id=device.id %}">
-        {% csrf_token %}
-        <button type="submit">
-            {% if device.is_charging %}
-                Slå av lading
-            {% else %}
-                Slå på lading
-            {% endif %}
-        </button>
-    </form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyHome</title>
+    <link id="theme-style" rel="stylesheet" href="{% static 'css/dark-mode.css' %}">
+    <link rel="stylesheet" href="{% static 'css/device_details.css' %}">
+    <script src="{% static 'js/toggle_theme.js' %}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EasyHome</h1>
+        </header>
+    
+    <div class="home-header">
+        <section class="header-container">
+            <h2>{{device.name}}</h2>
+        </section>
+        <button class="icon-button"><span class="icon">
+            <a href="{% url 'settings' %}">⚙️</a></span></button>
+        <button class="icon-button2"><span class="icon">
+            <a href="{% url 'home' %}">🏠</a></span></button>
+    </div>
+    
+        <div class="each-device-container">
+        {% if device_messages %}
+    <ul id="messages" class="messages">
+        {% for message in device_messages %}
+            <li class="{{ message.tags }}">{{ message.message|slice:"7:" }}</li> <!-- Fjerner ID-prefiksen -->
+        {% endfor %}
+    </ul>
 {% endif %}
+        {{device.description}}
+                <p>Rom: {{device.room}}</p>
+            {% if device.get_device_type == 'smartthermostat' %}
+                <p>Temperatur i rommet: {{ device.get_temperature }} C&deg;</p>
+                <p>Satt temperatur på termostat: {{ device.get_set_temperature }} C&deg; </p>
+                <p>Tilstand: {{ device.get_mode }}</p>
+                <p>Relativ luftfuktighet: {{ device.get_humidity }}</p>
+                    <form method="post" action="{% url 'update_device_temperature' device_type=device.get_device_type id=device.id %}">
+                        {% csrf_token %}
+                        <label for="temperature">Sett ny temperatur:</label>
+                        <input type="number" id="temperature" name="temperature" value="{{ device.get_set_temperature }}">
+                        <button type="submit">Oppdater temperatur</button>
+                    </form>
+                {% endif %}
 
+            {% if device.get_device_type == 'smartbulb' %}
+                <p>Farge: {{ device.get_color }}</p>
+                <p>Tilstand: {% if device.get_is_on_status == False %}Lys er av{% else %}Lys er på{% endif %}</p>
+                <p>Styrke: {{ device.get_brightness}}</p>
+            <form method="post" action="{% url 'toggle_light' device_type=device.get_device_type id=device.id %}">
+                {% csrf_token %}
+                <button type="submit">
+                    {% if device.is_on %}
+                        Slå av lyset
+                    {% else %}
+                        Slå på lyset
+                {% endif %}
+                </button>
+            </form>
 
-    </p>
-<button class="device-button"><a href="{% url 'update_device' device.get_device_type device.id %}">Endre enhet</a></button>
-<button class="device-button"><a href="{% url 'delete_device' device.get_device_type device.id %}">Slette enhet</a></button>
+                {% endif %}
 
+            {% if device.get_device_type == 'carcharger' %}
+                    <p>Batteri: {{ device.get_battery_charge }} kW</p>
+                    <p>Batterikapasitet: {{ device.get_battery_capacity }} kW</p>
+                    <p>Ladestatus: {{ device.get_is_charging_status }}</p>
+                    <p>Strømstyrke: {{ device.get_current_power_consumption }} A</p>
+                
+                    <form method="post" action="{% url 'toggle_charger' device_type=device.get_device_type id=device.id %}">
+                        {% csrf_token %}
+                        <button type="submit">
+                            {% if device.is_charging %}
+                                Slå av lading
+                            {% else %}
+                                Slå på lading
+                            {% endif %}
+                        </button>
+                    </form>
 
+                {% endif %}
+        </div>
+    
+        <div class="new-device-container">
+    
+            <button class="device-button"><a href="{% url 'update_device' device.get_device_type device.id %}">Endre enhet</a></button>
+            <button class="device-button"><a href="{% url 'delete_device' device.get_device_type device.id %}">Slette enhet</a></button>
+            
+        </div>  
 
-{% endblock content %}
+    </div>
+</body>
+</html>
