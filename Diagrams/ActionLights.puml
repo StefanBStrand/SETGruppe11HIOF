@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+hide empty description
+
+state "Action Lights" as actionlights
+[*] --> actionlights : change_light_state
+
+state "Lights On" as lightson
+
+state "Lights Off" as lightsoff
+
+actionlights --> lightsoff : turn_off
+actionlights --> lightson : turn_on
+
+lightson --> lightsoff : turn_off
+lightsoff --> lightson : turn_on
+
+state Change_Light_Color {
+[*] --> yellow
+[*] --> blue
+[*] --> red
+yellow --> save_color
+blue --> save_color
+red --> save_color
+}
+
+actionlights --> Change_Light_Color
+lightson --> Change_Light_Color
+
+Change_Light_Color --> actionlights
+
+state Change_Light_Brightness {
+[*] --> brightness_level
+brightness_level --> higher_level : set(level)
+brightness_level --> lower_level : set(level)
+higher_level --> remeber_level : saveLevel
+higher_level --> lower_level : saveLevel
+lower_level --> remeber_level : saveLevel
+remeber_level --> brightness_level : currentLevel
+}
+
+actionlights --> Change_Light_Brightness
+lightson --> Change_Light_Brightness
+Change_Light_Brightness --> actionlights
+
+
+@enduml

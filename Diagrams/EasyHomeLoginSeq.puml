@@ -1,0 +1,90 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor MainUser as muser
+actor GuestUser as guser
+entity View as view
+entity Model as model
+database Database as db
+boundary Template as tp
+
+muser -> tp: write in username and password
+activate tp
+
+tp -> view: Give Username and password
+activate view
+
+view -> model: Check Username and password
+activate model
+
+model -> db: Checking credentials
+activate db
+
+db --> model: Sending user data or error
+deactivate db
+
+model --> view: Give login result
+deactivate model
+
+view -> tp: Give result code
+deactivate view
+
+tp --> muser: Show Login result or Error
+
+
+guser -> tp: write in username and password
+
+tp -> view: Give username and password
+activate view
+
+view -> model: Check username and password
+activate model
+
+model -> db : Checking credentials
+activate db
+
+db --> model : need permission from main user
+deactivate db
+
+model --> view : get permission message
+deactivate model
+
+view --> tp : give code message
+deactivate view
+
+tp --> guser : Need permission message
+tp --> muser : Guest User try to login message
+
+
+guser -> muser : ask for permission
+muser --> guser : give permission code
+
+guser --> tp: write in permission code
+
+tp -> view : Getting permission code
+
+view -> model : checking code
+activate model
+
+model -> db : check code validation
+activate db
+
+
+db --> model : Code valid, modify access
+deactivate db
+
+
+model --> view : Code valid, give access
+deactivate model
+activate view
+
+view --> tp : Access and transfer
+deactivate view
+
+tp --> guser: Access message and transfer to homescreen
+deactivate tp
+
+
+@enduml

@@ -1,0 +1,112 @@
+body {
+    background-color: #1a1a1a; /* Felles mørk bakgrunn */
+    color: #fff; /* Felles hvit tekst */
+}
+
+button {
+    background-color: #3a3a3a; /* Mørk grå */
+    color: #fff; /* Hvit tekst */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Redusert skygge */
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #555; /* Lysere grå ved hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Mykere hover-effekt */
+}
+
+
+input {
+    background-color: #2c2c2c; /* Felles mørk grå for input-felt */
+    color: #fff; /* Hvit tekst i input-felt */
+    border: none; /* Fjern kant */
+}
+
+.container {
+    background-color: #333; /* Felles mørk grå for containere */
+    color: #fff; /* Hvit tekst i containere */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Dyp skygge */
+
+}
+
+/* Dark mode homescreen */
+
+.icon-button {
+   background-color: #505050;
+    color: white;
+}
+
+.icon-button:hover {
+    background-color: #707070;
+}
+
+.header-container {
+    background-color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.room-container {
+    background-color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+device-button {
+    background-color: #707070;
+}
+
+.device-button a {
+    color: white;
+}
+
+
+.circle {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.icon-button {
+    color: #ffffff;
+}
+
+.add-device, .devices-settings {
+    background-color: #505050;
+    color: white;
+}
+
+footer .add-device a {
+    color: white;
+}
+
+.add-device:hover, .devices-settings:hover {
+    background-color: #707070;
+}
+
+/* Dark mode Settings */
+
+
+/* Dark mode Update_device */
+
+/* Dark mode new_device list */
+.middle-section-container button {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.middle-section-container button {
+    color: #cccccc;
+}
+
+.middle-section-container button a {
+    color: #cccccc;
+    text-decoration: none;
+}
+
+/* Dark mode Device_detail */
+
+.each-device-container{
+    background-color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+}

@@ -89,7 +89,7 @@ celerybeat-schedule
 .env
 .venv
 env/
-venv/
+.venv/
 ENV/
 env.bak/
 venv.bak/
@@ -115,3 +115,10 @@ dmypy.json
 *.iws
 .idea/
 .idea_modules/
+
+# Custom
+.DS_Store
+homeapp/migrations/0012_alter_smartbulb_color_alter_smartthermostat_humidity_and_more.py
+homeapp/migrations/0013_alter_smartdevice_device_type_and_more.py
+
+/homeapp/migrations

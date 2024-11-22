@@ -1,0 +1,63 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+hide empty description
+
+state "Control Panel" as controlpanel
+
+[*] --> controlpanel : Acess controlpanel
+
+state "Room" as room
+state "Smart Units" as units
+
+controlpanel --> room
+controlpanel --> units
+
+state "Living Room" as livingroom
+state "Kitchen" as kitchen
+state "Bathroom" as bathroom
+
+room --> livingroom
+room --> kitchen
+room --> bathroom
+
+livingroom --> chooseunit
+kitchen --> chooseunit
+bathroom --> chooseunit
+
+chooseunit --> thermostat
+chooseunit --> lightbulb
+
+state "Smart Thermostat" as thermostat
+state "Smart Car Charger" as carcharger
+state "Smart Lights" as lightbulb
+
+state "Action Thermostat" as actionthermo
+state "Action Car Charger" as actioncarcharg
+state "Action Lights" as actionlights
+
+units --> thermostat
+units --> carcharger
+units --> lightbulb
+
+thermostat --> chooseroom
+lightbulb --> chooseroom
+
+chooseroom --> livingroom
+chooseroom --> bathroom
+chooseroom --> kitchen
+
+livingroom --> actionlights
+livingroom --> actionthermo
+bathroom --> actionlights
+bathroom --> actionthermo
+kitchen --> actionthermo
+kitchen --> actionlights
+
+carcharger --> actioncarcharg
+
+state "Choose Room" as chooseroom
+state "Choose Smart Unit" as chooseunit
+
+
+@enduml

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+################################# IKKE I BRUK #################################
+    <h1>Thermostat Status</h1>
+
+    <p>Temperature: {{ thermostat.set_temperature }}</p>
+    <p>Mode: {{ thermostat.mode }}</p>
+    <p>Humidity: {{ thermostat.humidity }}</p>
+    <p>Room Temperature: {{ thermostat.temperature_in_room }}</p>
+
+
+    <h2>Adjust Temperature</h2>
+    <label for="temperatureSlider">Set Temperature:
+        <span id="sliderValue">{{ thermostat.set_temperature }}</span>°C
+    </label>
+    <input type="range" id="temperatureSlider" min="10" max="30" value="{{ thermostat.set_temperature }}"
+           oninput="updateSliderValue(this.value)">
+
+    <a href="{% url 'delete_device' thermostat.device_type thermostat.id %}" class="btn btn-primary">Slette enhet</a>
+
+    <script>
+
+    function updateSliderValue(value) {
+        document.getElementById('sliderValue').textContent = value;
+    }
+
+    document.getElementById('temperatureSlider').addEventListener('change', function() {
+        fetch("{% url 'update_thermostat' thermostat.id %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ mode: '{{ thermostat.mode }}', set_temperature: this.value })
+        })
+        .then(response => {
+            if(response.ok) {
+                console.log("Temperature updated!");
+            }
+        });
+    });
+    </script>
+
+    <br><br> <!--Styling is not a priority right now..:/.-->
+    <a href="{% url 'home' %}">Back to Home</a>
+
+
+{% endblock content %}
