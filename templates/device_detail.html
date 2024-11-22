@@ -29,7 +29,7 @@
         {% if device_messages %}
     <ul id="messages" class="messages">
         {% for message in device_messages %}
-            <li class="{{ message.tags }}">{{ message.message|slice:"7:" }}</li> <!-- Fjerner ID-prefiksen -->
+            <li class="{{ message.tags }}">{{ message.message}}</li> <!-- Fjerner ID-prefiksen -->
         {% endfor %}
     </ul>
 {% endif %}
