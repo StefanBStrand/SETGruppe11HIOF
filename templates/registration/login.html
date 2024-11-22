@@ -14,6 +14,9 @@
         <img id="logo" src="/static/images/easyhome_logo_dark.png" alt="Logo" class="logo">
         
         <h1>Logg inn</h1>
+        <section class="login-text">
+                <h3>For å logge deg inn, benytter du brukernavn: sensor og passord: sensor</h3>
+            </section>
         <form method="post">
             {% csrf_token %}
             <input type="text" name="username" placeholder="Brukernavn" required>
