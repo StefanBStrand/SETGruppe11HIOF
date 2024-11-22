@@ -19,17 +19,20 @@
     
     <div class="home-header">
         <section class="header-container">
-            <h2>Oppdater enhet</h2>
+            <h2>Slett enhet</h2>
         </section>
         <button class="icon-button"><span class="icon">⚙️</span></button>
+        <button class="icon-button2"><span class="icon">🏠</span></button>
     </div>
 
-        Slette enhet
+        <div class="form-styling">
         <form action="" method="post">{% csrf_token %}
-            Skal du slette: {{ device.name }} ?
-            <input type="submit" value="SLETTE ENHET">
+            Ønsker du å slette: {{ device.name }} ?
+            
+            <input type="submit" value="SLETT ENHET">
 
         </form>
+        </div> 
     </div>
 </body>
 </html>

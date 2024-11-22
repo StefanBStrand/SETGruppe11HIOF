@@ -20,17 +20,18 @@
     
     <div class="home-header">
         <section class="header-container">
-            <h2>Oppdater enhet</h2>
+            <h2>Legg til enhet</h2>
         </section>
         <button class="icon-button"><span class="icon">⚙️</span></button>
+        <button class="icon-button2"><span class="icon">🏠</span></button>
     </div>
 
-Ny enhet
-<form action="" method="post">{% csrf_token %}
-    {{ form|crispy }}
-    <input type="submit" value="Lagre enhet">
-
-</form>
+    <div class="form-styling">
+        <form action="" method="post">{% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="Lagre enhet">
+        </form>
+        </div>
 
     </div>
 </body>

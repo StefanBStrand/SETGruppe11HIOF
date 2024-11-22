@@ -1,7 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #ffffff;
     margin: 0;
     padding: 0;
     display: flex;
@@ -26,15 +24,17 @@ header h1 {
 
 .home-header {
     display: flex;
-    align-items: center; /* Juster innhold vertikalt */
-    justify-content: center; /* Sentrer horisontalt */
-    gap: 10px; /* Avstand mellom headeren og knappen */
-    margin-top: 20px; /* Juster margin etter behov */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    position: relative;
+    left: 20px;
 }
 
 .home-header h2 {
     margin: 0;
-    font-size: 1.5rem; /* Tilpass fontstørrelse */
+    font-size: 1.5rem;
 
 }
 
@@ -52,14 +52,31 @@ header h1 {
     font-size: 1.5rem;
 }
 
+.icon-button2 {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    position: relative;
+    right: 300px;
+}
+
 .icon-button:hover {
     background-color: #707070;
 }
 
+.each-device-container{
+    border-radius: 15px;
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+
+}
+
+
+
 .header-container {
     position: relative;
     left: 30px;
-    background-color: #333;
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
@@ -70,13 +87,35 @@ header h1 {
 .each-device-container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Sentrer horisontalt */
-    justify-content: center; /* Sentrer vertikalt */
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    width: 70%; /* Full bredde */
-    max-width: 200px; /* Valgfri maks bredde */
-    min-height: 50vh; /* Fyll minst halvparten av skjermen vertikalt */
+    width: 70%;
+    max-width: 300px;
+    height: 60%;
     margin: auto;
-    gap: 15px;
+    margin-top: 10px;
 }
+
+.new-device-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 100px;
+
+}
+
+.new-device-container button {
+    text-decoration: none;
+    border: none;
+    padding: 15px 15px;
+    border-radius: 5px;
+    margin: 10px 10px; /* Legger til horisontalt mellomrom */
+    cursor: pointer;
+    display: inline-block;
+    width: 70%;
+    margin-bottom: 50px;
+}
+
+
 
