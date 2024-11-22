@@ -50,14 +50,14 @@ input {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
-.device-button {
-    background-color: #505050;
-    color: #fff;
+device-button {
+    background-color: #707070;
 }
 
 .device-button a {
-    background-color: #707070;
+    color: white;
 }
+
 
 .circle {
     background-color: #2a2a2a;
@@ -93,6 +93,20 @@ footer .add-device a {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
+.middle-section-container button {
+    color: #cccccc;
+}
+
+.middle-section-container button a {
+    color: #cccccc;
+    text-decoration: none;
+}
+
 /* Dark mode Device_detail */
 
+.each-device-container{
+    background-color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
 
+}

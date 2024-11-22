@@ -1,11 +1,11 @@
 body {
-    background-color: #fff; /* Felles lys bakgrunn */
-    color: #000; /* Felles svart tekst */
+    background-color: #fff;
+    color: #000;
 }
 
 button {
-    background-color: #ccc; /* Lys grå farge */
-    color: #000; /* Svart tekst */
+    background-color: #ccc;
+    color: #000;
     transition: box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
@@ -14,26 +14,25 @@ button a{
 }
 
 button:hover {
-    background-color: #d6d6d6; /* Mørkere grå ved hover */
+    background-color: #d6d6d6;
 }
 
 
 input {
-    background-color: #f0f0f0; /* Felles lys grå for input-felt */
-    color: #000; /* Svart tekst i input-felt */
-    border: 1px solid #ccc; /* Lys kant */
+    background-color: #f0f0f0;
+    color: #000;
+    border: 1px solid #ccc;
 }
 
 .container {
-    background-color: #f9f9f9; /* Felles lys grå for containere */
-    color: #000; /* Svart tekst i containere */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Myk skygge */
+    background-color: #f9f9f9;
+    color: #000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Light mode homescreen */
 
 .icon-button {
-   background-color: #707070;
     color: black;
 }
 
@@ -100,3 +99,8 @@ footer .add-device a {
 }
 
 /* Light mode Device_detail */
+
+.each-device-container{
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
