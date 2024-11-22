@@ -66,6 +66,15 @@ header h1 {
     font-size: 1.5rem;
 }
 
+.icon-button a {
+    text-decoration: none;
+}
+
+.icon-button2 a {
+    text-decoration: none;
+}
+
+
 .icon-button:hover {
     /*background-color: #707070;*/
 }
