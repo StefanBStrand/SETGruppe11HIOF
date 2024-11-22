@@ -121,12 +121,12 @@ def update_device_temperature(request, device_type, id):
 
         try:
             response_message = device.update_temperature(new_temperature)
-            messages.success(request, response_message)
+            messages.success(request, f"{id}:{response_message}")
         except Exception as e:
-            messages.error(request, f"Feil ved oppdatering av temperatur: {e}")
+            messages.error(request, f"{id}:Feil ved oppdatering av temperatur: {e}")
         return redirect('device_detail', device_type=device_type, id=id)
 
-    messages.error(request, "Invalid request method.")
+    messages.error(request, f"{id}:Invalid request method.")
     return redirect('device_detail', device_type=device_type, id=id)
 
 
@@ -152,7 +152,17 @@ def device_detail_view(request, device_type, id):
         return redirect('home')
 
     device = get_object_or_404(model, id=id)
-    return render(request, 'device_detail.html', {'device': device, 'device_type': device_type})
+
+    device_messages = []
+    for message in messages.get_messages(request):
+        if str(device.id) in message.message:  # Filtrer meldinger basert på enhets-ID
+            device_messages.append(message)
+
+    return render(request, 'device_detail.html', {
+        'device': device,
+        'device_type': device_type,
+        'device_messages': device_messages,
+    })
 
 
 @login_required
@@ -211,10 +221,10 @@ def toggle_light(request, device_type, id):
     try:
         if bulb.is_on:
             response_message = bulb.turn_off()
-            messages.success(request, response_message)
+            messages.success(request, f"{id}:{response_message}")
         else:
             response_message = bulb.turn_on()
-            messages.success(request, response_message)
+            messages.success(request, f"{id}:{response_message}")
     except Exception as e:
         messages.error(request, f"Failed to toggle light: {e}")
 
@@ -231,10 +241,10 @@ def toggle_charger(request, device_type, id):
     try:
         if charger.is_on and charger.is_connected_to_car and charger.is_charging:
             response_message = charger.stop_charging(10)
-            messages.success(request, response_message)
+            messages.success(request, f"{id}:{response_message}")
         else:
             response_message = charger.start_charging(charger.car_battery_charge)
-            messages.success(request, response_message)
+            messages.success(request, f"{id}:{response_message}")
     except Exception as e:
         messages.error(request, f"Feil ved lading: {e}")
 

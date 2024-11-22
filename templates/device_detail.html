@@ -25,10 +25,14 @@
             <a href="{% url 'home' %}">🏠</a></span></button>
     </div>
     
-            {{device.description}}
-    
-    
         <div class="each-device-container">
+        {% if device_messages %}
+    <ul id="messages" class="messages">
+        {% for message in device_messages %}
+            <li class="{{ message.tags }}">{{ message.message|slice:"7:" }}</li> <!-- Fjerner ID-prefiksen -->
+        {% endfor %}
+    </ul>
+{% endif %}
         {{device.description}}
                 <p>Rom: {{device.room}}</p>
             {% if device.get_device_type == 'smartthermostat' %}
