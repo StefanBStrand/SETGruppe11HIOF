@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 
 from .forms import SmartThermostatForm, SmartBulbForm, CarChargerForm
 from .models import Home, Room, SmartDevice, CarCharger, SmartThermostat, SmartBulb
@@ -50,7 +49,7 @@ def create_smart_thermostat_device_view(request):
     else:
         form = SmartThermostatForm()
 
-    return render(request, 'create_device.html', {'form': form})
+    return render(request, 'new_device.html', {'form': form})
 
 def update_thermostat(request, id):
     thermostat = get_object_or_404(SmartThermostat, id=id)
@@ -66,7 +65,7 @@ def update_thermostat(request, id):
         try:
             thermostat.mode = mode
             thermostat.save()
-            messages.success(request, "Thermostat updated successfully.")
+            messages.success(request, "Termostat oppdatert!.")
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
             return render(request, 'thermostat.html', {'thermostat': thermostat})
@@ -92,11 +91,13 @@ def update_device_view(request, device_type, id):
         form = form_class(request.POST, instance=device)
         if form.is_valid():
             form.save()
-            return redirect(reverse_lazy('home'))
+            return redirect('device_detail', device_type=device_type, id=id)
     else:
         form = form_class(instance=device)
     return render(request, 'update_device.html', {'form': form, 'device_type': device_type})
 
+'''
+Disse er ikke i bruk.
 
 @login_required
 def delete_smart_thermostat_device_view(request, id):
@@ -104,12 +105,14 @@ def delete_smart_thermostat_device_view(request, id):
     if request.method == 'POST':
         smart_thermostat.delete()
         return redirect(reverse_lazy('home'))
-    return render(request, 'delete_device.html', {'smart_thermostat': smart_thermostat})
+    return render(request, 'create_device.html', {'smart_thermostat': smart_thermostat})
 
+#Brukes ikke
 def thermostat_detail(request, id):
     thermostat = get_object_or_404(SmartThermostat, id=id)
     return render(request, 'thermostat_detail.html', {'thermostat': thermostat})
 
+'''
 @login_required
 def update_device_temperature(request, device_type, id):
     if request.method == "POST":
@@ -124,7 +127,8 @@ def update_device_temperature(request, device_type, id):
         return redirect('device_detail', device_type=device_type, id=id)
 
     messages.error(request, "Invalid request method.")
-    return redirect(reverse('device_detail', kwargs={'device_type': device_type, 'id': id}))
+    return redirect('device_detail', device_type=device_type, id=id)
+
 
 
 @login_required
@@ -213,5 +217,25 @@ def toggle_light(request, device_type, id):
             messages.success(request, response_message)
     except Exception as e:
         messages.error(request, f"Failed to toggle light: {e}")
+
+    return redirect('device_detail', device_type=device_type, id=id)
+
+@login_required
+def toggle_charger(request, device_type, id):
+
+    if device_type != "carcharger":
+        return redirect('device_detail', device_type=device_type, id=id)
+
+    charger = get_object_or_404(CarCharger, id=id)
+
+    try:
+        if charger.is_on and charger.is_connected_to_car and charger.is_charging:
+            response_message = charger.stop_charging(10)
+            messages.success(request, response_message)
+        else:
+            response_message = charger.start_charging(charger.car_battery_charge)
+            messages.success(request, response_message)
+    except Exception as e:
+        messages.error(request, f"Feil ved lading: {e}")
 
     return redirect('device_detail', device_type=device_type, id=id)

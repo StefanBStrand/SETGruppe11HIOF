@@ -62,10 +62,11 @@
                 {% endif %}
 
             {% if device.get_device_type == 'carcharger' %}
-                    <p>Batteri: {{ get_battery_charge }} kW</p>
+                    <p>Batteri: {{ device.get_battery_charge }} kW</p>
                     <p>Batterikapasitet: {{ device.get_battery_capacity }} kW</p>
                     <p>Ladestatus: {{ device.get_is_charging_status }}</p>
                     <p>Strømstyrke: {{ device.get_current_power_consumption }} A</p>
+
                 {% endif %}
         </div>
     
