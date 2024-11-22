@@ -66,6 +66,17 @@
                     <p>Batterikapasitet: {{ device.get_battery_capacity }} kW</p>
                     <p>Ladestatus: {{ device.get_is_charging_status }}</p>
                     <p>Strømstyrke: {{ device.get_current_power_consumption }} A</p>
+                
+                    <form method="post" action="{% url 'toggle_charger' device_type=device.get_device_type id=device.id %}">
+                        {% csrf_token %}
+                        <button type="submit">
+                            {% if device.is_charging %}
+                                Slå av lading
+                            {% else %}
+                                Slå på lading
+                            {% endif %}
+                        </button>
+                    </form>
 
                 {% endif %}
         </div>
